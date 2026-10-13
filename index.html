@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyGame Business Strategy - Presentación Interactiva</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:wght@400;600&display=swap');
+
+        :root {
+            --primary: #100666;
+            --primary-dark: #0A0444;
+            --primary-light: #6A63C9;
+            --amber: #3B33B5;
+            --accent-green: #7BC143;
+            --accent-teal: #00B4D8;
+            --accent-purple: #9B59B6;
+            --accent-red: #E74C3C;
+            --dark: #2D2D2D;
+            --light: #F3F2FB;
+            --white: #ffffff;
+            --cg-blue: #1A5276;
+            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #100666 0%, #0A0444 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.6s ease;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+            min-height: 85vh;
+        }
+
+        .slide.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--amber) 100%);
+            color: var(--white);
+            padding: 40px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+
+        .slide-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4em;
+            font-weight: 300;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 50px;
+            font-size: 5em;
+            font-weight: 800;
+            opacity: 0.18;
+            font-family: 'Montserrat', sans-serif;
+            z-index: 0;
+        }
+
+        .slide-content { padding: 40px 50px; }
+
+        /* ===== NAV ===== */
+        .nav-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--dark);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
+        }
+        .nav-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(16,6,102,0.5);
+        }
+        .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .slide-counter { color: var(--white); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.1em; }
+
+        .progress-bar {
+            position: fixed; top: 0; left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--amber), var(--accent-green));
+            transition: width 0.4s ease;
+            z-index: 1001;
+        }
+
+        /* ===== CARDS ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        /* Cuatro tarjetas en una sola línea */
+        .card-grid.cols4 { grid-template-columns: repeat(4, 1fr); }
+        .card-grid.cols4 .card { padding: 24px 22px; }
+        .card-grid.cols4 .card h3 { font-size: 1.18em; }
+        @media (max-width: 1024px) { .card-grid.cols4 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .card-grid.cols4 { grid-template-columns: 1fr; } }
+        .card {
+            background: linear-gradient(145deg, #ffffff, #F3F2FB);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 100px; height: 100px;
+            background: linear-gradient(135deg, transparent 50%, rgba(16,6,102,0.06) 50%);
+            border-radius: 0 0 0 100%;
+        }
+        .card.bd-amber { border-left-color: var(--amber); }
+        .card.bd-green { border-left-color: var(--accent-green); }
+        .card.bd-teal { border-left-color: var(--accent-teal); }
+        .card.bd-purple { border-left-color: var(--accent-purple); }
+        .card.bd-red { border-left-color: var(--accent-red); }
+        .card-icon { font-size: 2.5em; margin-bottom: 15px; }
+        .card h3 { font-family: 'Montserrat', sans-serif; font-size: 1.3em; color: var(--dark); margin-bottom: 12px; }
+        .card p { color: #666; line-height: 1.7; font-size: 0.95em; }
+        .card p strong { color: var(--dark); }
+
+        /* ===== TABLE ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .data-table thead { background: linear-gradient(135deg, var(--primary), var(--amber)); color: var(--white); }
+        .data-table th { padding: 16px 20px; text-align: left; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { padding: 14px 20px; border-bottom: 1px solid #E3E1F2; font-size: 0.95em; }
+        .data-table tbody tr:hover { background: #ECEBF8; }
+        .data-table tbody tr:nth-child(even) { background: #F7F6FC; }
+
+        /* ===== ACCORDION (FAQ) ===== */
+        .accordion { margin-top: 25px; }
+        .accordion-item { margin-bottom: 12px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .accordion-header {
+            background: linear-gradient(135deg, #F3F2FB, #ffffff);
+            padding: 18px 25px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--dark);
+            transition: all 0.3s ease; border-left: 4px solid var(--primary-light);
+        }
+        .accordion-header:hover { background: linear-gradient(135deg, #E6E4F6, #F3F2FB); border-left-color: var(--primary); }
+        .accordion-header .icon { font-size: 1.3em; transition: transform 0.3s ease; color: var(--primary); }
+        .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: var(--white); }
+        .accordion-item.active .accordion-body { max-height: 500px; }
+        .accordion-content { padding: 20px 25px; color: #555; line-height: 1.8; }
+        .accordion-content strong { color: var(--primary-dark); }
+
+        /* ===== VALUE CHAIN ===== */
+        .value-chain { display: flex; justify-content: space-between; align-items: center; margin: 40px 0; flex-wrap: wrap; gap: 15px; }
+        .chain-box {
+            flex: 1; min-width: 150px;
+            background: linear-gradient(135deg, var(--primary), var(--amber));
+            color: var(--white); padding: 25px 20px; border-radius: 14px; text-align: center;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+        .chain-box.cb-amber { background: linear-gradient(135deg, var(--amber), #241C8A); }
+        .chain-box.cb-green { background: linear-gradient(135deg, var(--accent-green), #5FA130); }
+        .chain-box.cb-teal { background: linear-gradient(135deg, var(--accent-teal), #0090AD); }
+        .chain-box:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(16,6,102,0.3); }
+        .chain-box .cb-emoji { font-size: 1.8em; display: block; margin-bottom: 8px; }
+        .chain-arrow { font-size: 2em; color: var(--primary); animation: float 2s ease infinite; }
+        .value-chain.vc-6 { gap: 10px; }
+        .value-chain.vc-6 .chain-box { min-width: 110px; padding: 22px 10px; }
+
+        /* ===== PERCENTAGE BARS / FACTORS ===== */
+        .factor-block { margin: 22px 0; }
+        .factor-block .pct-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.05em; color: var(--dark); }
+        .factor-block .pct-label .pct-num { color: var(--primary-dark); }
+        .percentage-track { height: 26px; background: #E3E1F2; border-radius: 13px; overflow: hidden; position: relative; }
+        .percentage-fill {
+            height: 100%; border-radius: 13px;
+            display: flex; align-items: center; justify-content: flex-end; padding-right: 12px;
+            color: var(--white); font-weight: 700; font-size: 0.85em;
+            transition: width 1.4s ease; width: 0;
+        }
+        .slide.active .percentage-fill { width: var(--target-width); }
+        .factor-block .pct-desc { color: #666; font-size: 0.92em; line-height: 1.6; margin-top: 8px; }
+        .fill-orange { background: linear-gradient(90deg, #6A63C9, #0A0444); }
+        .fill-amber  { background: linear-gradient(90deg, #FBC02D, #E6920A); }
+        .fill-green  { background: linear-gradient(90deg, #9BD15F, #5FA130); }
+        .fill-teal   { background: linear-gradient(90deg, #33C7E8, #0090AD); }
+        .fill-purple { background: linear-gradient(90deg, #B57BCC, #7D3C98); }
+        .fill-red    { background: linear-gradient(90deg, #EC7063, #C0392B); }
+        .fill-blue   { background: linear-gradient(90deg, #2E86C1, #1A5276); }
+
+        /* ===== BADGES ===== */
+        .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.8em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 3px; }
+        .badge-orange { background:#E3E1F5; color:#100666; }
+        .badge-green { background: #E8F8D8; color: #4A8C1C; }
+        .badge-teal { background: #D4F1F9; color: #0077A3; }
+        .badge-amber { background: #FEF3CD; color: #B7860B; }
+        .badge-purple { background: #F0E2F6; color: #7D3C98; }
+
+        /* ===== TWO COLUMN ===== */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
+
+        /* ===== HERO (PORTADA) ===== */
+        .hero {
+            text-align: center; padding: 70px 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--amber) 55%, #6A63C9 100%);
+            color: var(--white); position: relative; overflow: hidden;
+        }
+        .hero .hero-logo { font-size: 4.5em; margin-bottom: 10px; animation: float 3s ease infinite; }
+        .hero h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5em; font-weight: 800; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.15); }
+        .hero .subtitle { font-size: 1.3em; opacity: 0.95; margin-bottom: 22px; }
+        .hero .hero-context { max-width: 760px; margin: 0 auto 26px; font-size: 1.02em; line-height: 1.7; opacity: 0.95; }
+        .hero-badges { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .hero-badge { background: rgba(255,255,255,0.22); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 30px; font-weight: 600; font-size: 0.9em; }
+        .hero-brand { margin-top: 40px; display: flex; gap: 22px; align-items: center; justify-content: center; flex-wrap: wrap; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.9em; opacity: 0.95; }
+        .hero-brand .cg { letter-spacing: 3px; font-weight: 800; }
+
+        /* ===== SEGMENT ROWS ===== */
+        .seg-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; margin-bottom: 10px; }
+        .seg-row .seg-emoji { font-size: 1.7em; }
+        .seg-row strong { font-family: 'Montserrat', sans-serif; color: var(--dark); }
+        .seg-row small { color: #777; }
+
+        /* ===== FACTOR ACCORDION ===== */
+        .factor-accordion { margin: 25px 0; }
+        .factor-item { margin-bottom: 15px; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+        .factor-item:hover { box-shadow: 0 6px 25px rgba(0,0,0,0.12); }
+        .factor-header { padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1em; color: var(--white); transition: all 0.3s ease; }
+        .factor-header .factor-tag { background: rgba(255,255,255,0.28); padding: 6px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 800; }
+        .factor-header .factor-icon { font-size: 1.3em; transition: transform 0.3s ease; }
+        .factor-item.active .factor-header .factor-icon { transform: rotate(180deg); }
+        .factor-orange { background: linear-gradient(135deg, #100666, #0A0444); }
+        .factor-amber  { background: linear-gradient(135deg, #F9A825, #E6920A); }
+        .factor-green  { background: linear-gradient(135deg, #7BC143, #5FA130); }
+        .factor-teal   { background: linear-gradient(135deg, #00B4D8, #0090AD); }
+        .factor-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: var(--white); }
+        .factor-item.active .factor-body { max-height: 400px; }
+        .factor-content { padding: 22px 25px; color: #555; line-height: 1.8; }
+        .factor-content strong { color: var(--dark); }
+
+        /* ===== MÉTODOS / TIMELINE DE IMPLEMENTACIÓN ===== */
+        .method { border-radius: 18px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12); margin-bottom: 34px; }
+        .method.m-orange { --m1:#100666; --m2:#0A0444; --msoft:rgba(16,6,102,0.07); }
+        .method.m-green  { --m1:#7BC143; --m2:#5FA130; --msoft:rgba(123,193,67,0.10); }
+        .method.m-teal   { --m1:#00B4D8; --m2:#0090AD; --msoft:rgba(0,180,216,0.09); }
+        .method.m-purple { --m1:#9B59B6; --m2:#7D3C98; --msoft:rgba(155,89,182,0.08); }
+        .method-head { background: linear-gradient(135deg, var(--m1), var(--m2)); color:#fff; padding: 24px 34px; }
+        .method-head h3 { font-family:'Montserrat'; font-size:1.55em; font-weight:800; display:flex; align-items:center; gap:12px; margin-bottom:4px; }
+        .method-head .method-quote { font-style:italic; opacity:0.93; font-size:1em; }
+        .method-body { background:#f7f8fb; padding: 28px 34px 34px; }
+        .tl-title { text-align:center; font-family:'Montserrat'; font-weight:800; font-size:1.5em; color:var(--m2); margin-bottom:6px; }
+        .tl-sub { text-align:center; font-style:italic; color:#666; margin-bottom:6px; }
+
+        .tl { position:relative; padding: 58px 8px 52px; }
+        .tl-track { display:flex; align-items:center; justify-content:space-between; position:relative; }
+        .tl-track::before { content:''; position:absolute; left:1.5%; right:1.5%; top:50%; height:4px; transform:translateY(-50%); border-radius:2px; z-index:0; background: linear-gradient(90deg, var(--m1), var(--m2)); }
+        .tl-node { position:relative; z-index:1; display:flex; align-items:center; justify-content:center; }
+        .tl-week { width:24px; height:24px; border-radius:50%; background:#fff; border:4px solid var(--m2); box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+        .tl-act { width:50px; height:50px; border-radius:50%; background: linear-gradient(135deg, var(--m1), var(--m2)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.3em; box-shadow:0 4px 14px rgba(0,0,0,0.22); }
+        .tl-label { position:absolute; left:50%; transform:translateX(-50%); width:100px; text-align:center; font-family:'Montserrat'; font-weight:700; font-size:0.66em; text-transform:uppercase; letter-spacing:0.5px; line-height:1.25; color:#54606e; }
+        .tl-label.below { top: calc(100% + 10px); }
+        .tl-label.above { bottom: calc(100% + 10px); }
+        .tl-label.wk { color:#7a8694; font-weight:600; }
+
+        .alt-sub { font-family:'Montserrat'; font-weight:800; color:var(--m2); margin: 22px 0 2px; display:flex; align-items:center; gap:8px; font-size:1.05em; }
+        .tl-auto { border:2px solid var(--m2); border-radius:14px; background:var(--msoft); padding:16px 24px; display:flex; align-items:center; gap:26px; margin-top:6px; }
+        .tl-auto-lbl { font-family:'Montserrat'; font-weight:800; color:var(--m2); font-size:1.05em; line-height:1.2; white-space:nowrap; }
+        .tl-auto-pins { display:flex; justify-content:space-around; flex:1; gap:10px; flex-wrap:wrap; }
+        .tl-auto-pin { display:flex; flex-direction:column; align-items:center; gap:8px; }
+        .tl-auto-pin .pin-lbl { font-family:'Montserrat'; font-weight:700; font-size:0.6em; text-transform:uppercase; letter-spacing:0.5px; color:var(--m2); text-align:center; line-height:1.2; }
+        .tl-auto-pin .pin-c { width:42px; height:42px; border-radius:50%; background: linear-gradient(135deg, var(--m1), var(--m2)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1em; box-shadow:0 3px 10px rgba(0,0,0,0.18); }
+        @media (max-width: 768px) {
+            .tl-auto { flex-direction:column; gap:14px; }
+            .tl-label { font-size:0.55em; width:74px; }
+        }
+
+        /* ===== CARACTERÍSTICAS DE MÉTODO ===== */
+        .features { background:#fff; border:2px solid var(--m2); border-radius:14px; padding:22px 26px; margin-top:24px; }
+        .features h4 { font-family:'Montserrat'; font-weight:800; color:var(--m2); font-size:1.15em; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+        .features ul { list-style:none; padding:0; }
+        .features li { position:relative; padding:7px 0 7px 28px; color:#444; line-height:1.5; }
+        .features li::before { content:'✓'; position:absolute; left:2px; color:var(--m2); font-weight:800; }
+        .features .ideal { margin-top:14px; background:var(--msoft); border-radius:10px; padding:12px 16px; color:#445; line-height:1.5; }
+        .features .ideal strong { color:var(--m2); }
+
+        /* ===== FACTOR COLORS / CONTENT (Valor de la Compañía) ===== */
+        .factor-purple { background: linear-gradient(135deg, #9B59B6, #7D3C98); }
+        .factor-red    { background: linear-gradient(135deg, #EC7063, #C0392B); }
+        .factor-blue   { background: linear-gradient(135deg, #2E86C1, #1A5276); }
+        .factor-item.active .factor-body { max-height: 680px; }
+        .factor-content p { margin-bottom: 10px; }
+        .factor-content p:last-child { margin-bottom: 0; }
+        .factor-consejo { background:#F3F2FB; border-left:4px solid var(--amber); border-radius:8px; padding:12px 16px; margin-top:6px; color:#555; line-height:1.6; }
+        .factor-consejo strong { color: var(--primary-dark); }
+
+        /* ===== CUADRO DE MANDO (tarjetas de informe) ===== */
+        .cm-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:24px; margin-top:26px; }
+        @media (max-width: 1024px) { .cm-grid { grid-template-columns: repeat(2, 1fr); } }
+        /* OBSOLETO: .cm-masonry se conserva solo por compatibilidad con presentaciones antiguas. NO usar: Cuadro de Mando va siempre en .cm-grid */
+        .cm-masonry { column-count:3; column-gap:24px; margin-top:26px; }
+        .cm-masonry .cm-card { display:inline-block; width:100%; margin:0 0 24px; break-inside:avoid; -webkit-column-break-inside:avoid; }
+        @media (max-width:1024px){ .cm-masonry { column-count:2; } }
+        @media (max-width:560px){ .cm-masonry { column-count:1; } }
+        .cm-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.1); border:1px solid #eee; overflow:hidden; display:flex; flex-direction:column; transition: box-shadow .3s, transform .3s; }
+        .cm-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+        .cm-card .cm-img { padding:14px 14px 0; }
+        .cm-card .cm-img img { width:100%; border-radius:8px; border:1px solid #e6e6e6; cursor:zoom-in; display:block; transition: transform .3s ease; }
+        .cm-card .cm-img img:hover { transform: scale(1.01); }
+        .cm-card .cm-body { padding:16px 22px 22px; display:flex; flex-direction:column; flex:1; }
+        .cm-titlerow { display:flex; align-items:center; gap:10px; }
+        .cm-titlerow h3 { font-family:'Montserrat'; font-size:1.18em; color:var(--dark); display:flex; align-items:center; gap:8px; }
+        .cm-badge { margin-left:auto; background:#E3E1F5; color:#100666; font-family:'Montserrat'; font-weight:700; font-size:0.66em; text-transform:uppercase; letter-spacing:0.5px; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .cm-desc { color:#666; line-height:1.6; font-size:0.9em; margin:10px 0 14px; border-bottom:1px dashed #e2e8ee; padding-bottom:14px; }
+        .cm-why-label { align-self:flex-start; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--primary),var(--amber)); color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.7em; text-transform:uppercase; letter-spacing:0.5px; padding:8px 16px; border-radius:20px; box-shadow:0 3px 10px rgba(16,6,102,0.3); }
+        .cm-why-text { background:#F3F2FB; border-radius:10px; padding:12px 16px; margin-top:10px; color:#555; line-height:1.6; font-size:0.88em; }
+        .cm-why-text strong { color:var(--primary-dark); }
+        @media (max-width: 768px) { .cm-grid { grid-template-columns: 1fr; } }
+
+        /* ===== DECISIONES (bloques numerados) ===== */
+        .dec-block { border-radius:16px; overflow:hidden; box-shadow:0 6px 24px rgba(0,0,0,0.1); margin-bottom:26px; border:1px solid #eee; }
+        .dec-head { display:flex; align-items:center; gap:18px; padding:20px 28px; background:linear-gradient(135deg, var(--primary), var(--amber)); color:#fff; }
+        .dec-num { flex-shrink:0; width:46px; height:46px; border-radius:12px; background:rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.4em; }
+        .dec-head h3 { font-family:'Montserrat',sans-serif; font-size:1.3em; margin-bottom:3px; }
+        .dec-head p { font-size:0.92em; opacity:0.95; line-height:1.45; }
+        .dec-shot { padding:22px 26px 26px; background:#f7f9fb; text-align:center; }
+        .dec-shot img { width:100%; max-width:920px; border-radius:10px; border:1px solid #e0e6ea; box-shadow:0 4px 16px rgba(0,0,0,0.1); cursor:zoom-in; transition:transform .3s ease; }
+        .dec-shot img:hover { transform:scale(1.01); }
+
+        /* ===== GALLERY + LIGHTBOX ===== */
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-top: 28px; }
+        .shot {
+            border-radius: 14px; overflow: hidden; background: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #eee;
+            cursor: zoom-in; transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .shot:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        .shot img { width: 100%; height: auto; display: block; background: #fff; }
+        .shot figcaption {
+            padding: 14px 18px; font-family: 'Montserrat', sans-serif; font-weight: 600;
+            color: var(--dark); font-size: 0.95em;
+            border-top: 3px solid var(--primary); background: #F3F2FB;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .shot figcaption .zoom-hint { margin-left: auto; font-size: 0.78em; color: var(--primary); font-weight: 700; }
+
+        .lightbox {
+            position: fixed; inset: 0; background: rgba(20,12,4,0.92);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 3000; padding: 30px; opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease; cursor: zoom-out;
+        }
+        .lightbox.active { opacity: 1; visibility: visible; }
+        .lightbox img { max-width: 96%; max-height: 86vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transform: scale(0.96); transition: transform 0.3s ease; }
+        .lightbox.active img { transform: scale(1); }
+        .lightbox-caption { color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 600; margin-top: 18px; font-size: 1.05em; text-align: center; }
+        .lightbox-close { position: fixed; top: 22px; right: 32px; color: #fff; font-size: 2.4em; cursor: pointer; opacity: 0.8; transition: all 0.2s ease; line-height: 1; }
+        .lightbox-close:hover { opacity: 1; transform: scale(1.15); }
+
+        /* ===== CARTELERA (estilo BusinessGlobal) ===== */
+        .cartelera-container { text-align: center; margin: 30px 0; }
+        .cartelera-img { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); transition: transform 0.3s ease; cursor: zoom-in; }
+        .cartelera-img:hover { transform: scale(1.02); }
+        .cartelera-caption { margin-top: 15px; font-style: italic; color: #666; font-size: 0.95em; }
+
+        /* ===== RESERVED AVATAR BOX ===== */
+        .reserved {
+            margin: 30px auto 0; max-width: 760px; border: 2px dashed var(--primary-light); border-radius: 16px;
+            background: #F3F2FB; padding: 30px; text-align: center; color: #4A4580;
+        }
+        .reserved h3 { font-family: 'Montserrat', sans-serif; color: var(--primary-dark); margin-bottom: 8px; }
+        .reserved code { background: #E3E1F5; padding: 2px 8px; border-radius: 6px; color: var(--primary-dark); font-size: 0.9em; }
+
+        /* ===== INGRESO / PHONE ===== */
+        .plataforma-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-top: 20px; }
+        .plataforma-steps { list-style: none; padding: 0; margin-top: 10px; }
+        .plataforma-steps li { display: flex; gap: 16px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid #E3E1F2; font-size: 1.05em; color: #444; line-height: 1.5; }
+        .plataforma-steps li:last-child { border-bottom: none; }
+        .plataforma-steps .step-num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--amber)); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        .plataforma-steps strong { color: var(--primary-dark); }
+        .ingreso-title { font-family:'Montserrat',sans-serif; font-weight:800; font-size:2em; color:var(--primary); line-height:1.1; margin-bottom:6px; }
+        .ingreso-title::after { content:''; display:block; width:120px; height:5px; background:var(--primary); border-radius:3px; margin-top:14px; }
+        .ingreso-list { list-style:none; padding:0; margin-top:28px; counter-reset: ing; }
+        .ingreso-list li { counter-increment: ing; position:relative; padding:14px 0 14px 42px; font-size:1.15em; color:#444; line-height:1.45; border-bottom:1px solid #E3E1F2; }
+        .ingreso-list li:last-child { border-bottom:none; }
+        .ingreso-list li::before { content: counter(ing) "."; position:absolute; left:2px; top:14px; font-family:'Montserrat',sans-serif; font-weight:800; color:var(--primary); font-size:1.05em; }
+        .ingreso-list a { color:var(--primary-dark); font-weight:700; text-decoration:none; word-break:break-all; }
+        .ingreso-list a:hover { text-decoration:underline; }
+        .phone-logo small.tagline { letter-spacing:2px; color:#9aa; font-size:0.4em; }
+        .phone-mock { width: 290px; max-width: 100%; margin: 0 auto; background: #1a1a1a; border-radius: 42px; padding: 14px; box-shadow: 0 25px 60px rgba(0,0,0,0.35); animation: float 4s ease infinite; }
+        .phone-screen { background: #fff; border-radius: 30px; overflow: hidden; padding: 8px 26px 38px; position: relative; }
+        .phone-notch { width: 130px; height: 24px; background: #1a1a1a; border-radius: 0 0 16px 16px; margin: 0 auto 28px; }
+        .phone-logo { text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--primary); letter-spacing: 2px; font-size: 1.15em; }
+        .phone-logo small { display: block; font-size: 0.42em; letter-spacing: 3px; color: #b0b0b0; font-weight: 600; margin-top: 2px; }
+        .phone-title { text-align: center; font-size: 0.95em; color: #444; margin: 22px 0; font-weight: 600; border-top: 1px solid #eee; padding-top: 22px; }
+        .phone-field { background: #f4f4f4; border-radius: 8px; padding: 13px 14px; font-size: 0.8em; color: #9a9a9a; margin-bottom: 15px; }
+        .phone-btn { background: var(--primary); color: #fff; text-align: center; padding: 13px; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 1px; font-size: 0.85em; margin-top: 6px; }
+        .phone-recover { text-align: center; font-size: 0.72em; color: var(--primary); margin-top: 18px; }
+
+        /* ===== CLOSING ===== */
+        .closing { text-align: center; padding: 70px 40px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #fff; min-height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .closing .closing-emoji { font-size: 3.4em; margin-bottom: 16px; }
+        .closing h1 { font-family: 'Montserrat', sans-serif; font-size: 3.4em; color: #fff; margin-bottom: 14px; }
+        .closing p { color: rgba(255,255,255,0.92); font-size: 1.15em; max-width: 640px; margin: 0 auto 12px; line-height: 1.7; }
+        .closing .thanks-sub { font-size: 1.3em; opacity: 0.92; margin-bottom: 38px; }
+        .contact-box { display:inline-block; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.28); border-radius:16px; padding:24px 46px; margin: 4px auto 44px; backdrop-filter: blur(6px); }
+        .contact-line { font-size:1.12em; margin:9px 0; display:flex; align-items:center; gap:10px; justify-content:center; }
+        .contact-line a { color:#fff; text-decoration:none; }
+        .contact-line a:hover { text-decoration:underline; }
+        .sdn-logo { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:30px; }
+        .sdn-mark { width:48px; height:48px; border-radius:50%; border:3px solid #fff; display:flex; align-items:center; justify-content:center; font-size:1.5em; }
+        .sdn-text { text-align:left; line-height:1.08; }
+        .sdn-main { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.5em; letter-spacing:3px; display:block; }
+        .sdn-sub { font-family:'Montserrat',sans-serif; font-weight:500; letter-spacing:6px; font-size:0.72em; display:block; opacity:0.95; }
+        .sdn-col { font-size:0.62em; letter-spacing:3px; display:block; opacity:0.9; text-transform:uppercase; }
+        .sdn-img-box { display:inline-block; margin-bottom:30px; }
+        .sdn-img { width:300px; max-width:80%; height:auto; display:block; margin:0 auto; }
+        .contact-line .wa-icon { width:22px; height:22px; fill:#fff; flex-shrink:0; }
+        .brand-pill { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.2); backdrop-filter:blur(8px); padding:11px 24px; border-radius:30px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.95em; }
+        .social-row { display:flex; gap:16px; justify-content:center; margin:2px auto 32px; position:relative; z-index:1; }
+        .social-icon { width:46px; height:46px; border-radius:50%; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.32); display:flex; align-items:center; justify-content:center; transition:transform 0.2s ease, background 0.2s ease; }
+        .social-icon:hover { background:rgba(255,255,255,0.32); transform:translateY(-3px); }
+        .social-icon svg { width:22px; height:22px; fill:#fff; }
+
+        /* ===== SECTION DIVIDER (slides separadoras) ===== */
+        .section-divider {
+            min-height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 60px 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--amber) 60%, #6A63C9 100%);
+            color: var(--white); position: relative; overflow: hidden;
+        }
+        .section-divider::before {
+            content: ''; position: absolute; top: -20%; left: -10%; width: 480px; height: 480px;
+            background: rgba(255,255,255,0.08); border-radius: 50%;
+        }
+        .section-divider::after {
+            content: ''; position: absolute; bottom: -25%; right: -10%; width: 380px; height: 380px;
+            background: rgba(255,255,255,0.08); border-radius: 50%;
+        }
+        .section-divider .sd-icon { font-size: 4.5em; margin-bottom: 18px; position: relative; z-index: 1; animation: float 3s ease infinite; }
+        .section-divider .sd-eyebrow { font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 5px; font-size: 0.95em; opacity: 0.85; margin-bottom: 14px; position: relative; z-index: 1; text-transform: uppercase; }
+        .section-divider h1 { font-family: 'Montserrat', sans-serif; font-size: 3.4em; font-weight: 800; margin-bottom: 18px; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.15); }
+        .section-divider p { font-size: 1.2em; opacity: 0.95; max-width: 680px; margin: 0 auto; line-height: 1.6; position: relative; z-index: 1; }
+        .section-divider .sd-rule { width: 90px; height: 4px; background: rgba(255,255,255,0.7); border-radius: 2px; margin: 26px auto 0; position: relative; z-index: 1; }
+        @media (max-width: 768px) { .section-divider h1 { font-size: 2.1em; } }
+
+        /* ===== INTRO OVERLAY ===== */
+        .intro-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000; transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .intro-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .intro-overlay .intro-logo { margin-bottom: 16px; animation: float 3s ease infinite; }
+        .cover-photo { width: 440px; max-width: 84%; height: auto; display: block; margin: 0 auto; border-radius: 18px; border: 4px solid rgba(255,255,255,0.9); box-shadow: 0 16px 40px rgba(0,0,0,0.30); }
+        .hero .hero-logo .cover-photo { width: 380px; }
+        .intro-overlay h1 { font-family: 'Montserrat', sans-serif; font-size: 4em; color: var(--white); font-weight: 800; margin-bottom: 14px; text-align: center; }
+        .intro-overlay p { color: rgba(255,255,255,0.85); font-size: 1.3em; margin-bottom: 40px; text-align: center; padding: 0 20px; }
+        .start-btn {
+            background: var(--white); color: var(--primary-dark); border: none;
+            padding: 18px 50px; border-radius: 40px;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2em;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .start-btn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #ECEBF8; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        @media (max-width: 768px) {
+            .two-col, .plataforma-cols { grid-template-columns: 1fr; }
+            .slide-header h1 { font-size: 1.8em; }
+            .hero h1 { font-size: 2.2em; }
+            .value-chain { flex-direction: column; }
+            .chain-arrow { transform: rotate(90deg); }
+            .slide-content { padding: 30px 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===================== INTRO OVERLAY ===================== -->
+<!-- Portada: logo de Business Strategy tomado de la portada del manual (assets/portada.png)
+     y reemplaza el src de abajo. Mientras no exista, se ve el texto sobre el fondo naranja. -->
+<div class="intro-overlay" id="introOverlay">
+    <div class="intro-logo">
+<img class="cover-photo" src="assets/portada.png" alt="Business Strategy" onerror="this.style.display='none'">
+    </div>
+    <h1>Business Strategy</h1>
+    <p>Simulador de Gestión de una Compañía Global de Movilidad Eléctrica Urbana</p>
+    <button class="start-btn" onclick="startPresentation()">▶ INICIAR PRESENTACIÓN</button>
+</div>
+
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+<div class="presentation-container">
+
+    <!-- ===================== SLIDE 1: PORTADA + CONTEXTO ===================== -->
+    <div class="slide active" id="slide1">
+        <div class="hero">
+            <div class="hero-logo">
+<img class="cover-photo" src="assets/portada.png" alt="Business Strategy" onerror="this.style.display='none'">
+            </div>
+            <h1>Business Strategy</h1>
+            <p class="subtitle">Simulador de Gestión de una Compañía Global de Movilidad Eléctrica Urbana</p>
+            <p class="hero-context">
+                Asumes el máximo puesto ejecutivo de una compañía que fabrica pequeños vehículos eléctricos urbanos —patinetes, bicicletas y scooters— y compites contra otras cuatro grandes empresas en un mercado global de 9 áreas geográficas. Tomas de forma integrada decisiones de Marketing, Operaciones, Logística y Finanzas con un objetivo claro: hacer crecer el <strong>Valor de la Compañía</strong> periodo tras periodo.
+            </p>
+            <div class="hero-badges">
+                <span class="hero-badge">🎯 Niveles 6–7 · Alta Dirección</span>
+                <span class="hero-badge">🏆 Competitivo</span>
+                <span class="hero-badge">⏱️ 3–5 Periodos</span>
+                <span class="hero-badge">🛴🚲🛵 3 Líneas de Producto</span>
+            </div>
+            <div class="hero-brand">
+                <span class="cg">C O M P A N Y G A M E</span>
+                <span>•</span>
+                <span>Simuladores de Negocios Colombia</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 2: CARTELERA + AVATARES ===================== -->
+    <div class="slide" id="slide2">
+        <div class="slide-header">
+            <h1>🎮 Cartelera de Simuladores</h1>
+            <h2>El portafolio CompanyGame y sus avatares de IA</h2>
+            <div class="slide-number">01</div>
+        </div>
+        <div class="slide-content">
+            <p style="color:#555;line-height:1.7;">CompanyGame ofrece una amplia gama de simuladores de negocio organizados por nivel de dificultad y área de conocimiento. <strong style="color:var(--primary-dark);">Business Strategy</strong> se ubica en el área de <strong>Negocios y Estrategia</strong> (Niveles 6 y 7), integrando Marketing, Operaciones, Logística y Finanzas.</p>
+
+            <div class="cartelera-container">
+                <img class="cartelera-img" src="assets/cartelera.jpg" alt="Cartelera de simuladores CompanyGame" loading="lazy" onclick="openLightbox('assets/cartelera.jpg','Cartelera completa de simuladores CompanyGame — Niveles 1 a 7 por área de negocio')">
+                <div class="cartelera-caption">Cartelera completa de simuladores CompanyGame — Niveles 1 a 7 por área de negocio</div>
+            </div>
+
+            <div class="cartelera-container" id="avatares-container">
+                <img class="cartelera-img" src="assets/avatares.png" alt="Avatares de IA de los simuladores CompanyGame" loading="lazy"
+                     onclick="openLightbox('assets/avatares.png','Avatares de IA implementados en los simuladores CompanyGame')"
+                     onerror="this.closest('#avatares-container').style.display='none'; var p=document.getElementById('avatares-pending'); if(p) p.style.display='block';">
+                <div class="cartelera-caption">Avatares de IA implementados en los simuladores CompanyGame</div>
+            </div>
+
+            <div class="reserved" id="avatares-pending" style="display:none;">
+                <h3>🤖 Avatares de IA — pendiente de archivo</h3>
+                <p>Guarda la imagen de avatares como <code>assets/avatares.png</code> en la carpeta del proyecto y aparecerá aquí automáticamente, con el mismo estilo que la cartelera.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 3: INGRESO A LA PLATAFORMA ===================== -->
+    <div class="slide" id="slide3">
+        <div class="slide-header">
+            <h1>🙌 Ingreso a la Plataforma</h1>
+            <h2>Así accedes para empezar a competir</h2>
+            <div class="slide-number">02</div>
+        </div>
+        <div class="slide-content">
+            <div class="plataforma-cols">
+                <div>
+                    <ol class="ingreso-list">
+                        <li><a href="https://plataforma.companygame.net/">https://plataforma.companygame.net/</a></li>
+                        <li>Usuario y código personal (contraseña)</li>
+                        <li>Uso 100% en la nube</li>
+                        <li>Desde cualquier dispositivo y en cualquier lugar</li>
+                    </ol>
+                </div>
+                <div>
+                    <div class="phone-mock">
+                        <div class="phone-screen">
+                            <div class="phone-notch"></div>
+                            <div class="phone-logo">COMPANYGAME<small class="tagline">APRENDE SIMULANDO</small></div>
+                            <div class="phone-title">Acceso a la plataforma CompanyGame</div>
+                            <div class="phone-field">E-mail <span style="color:var(--accent-red);">*</span></div>
+                            <div class="phone-field">Código personal <span style="color:var(--accent-red);">*</span></div>
+                            <div class="phone-btn">ENTRAR</div>
+                            <div class="phone-recover">¿Olvidó su Código personal? / Recupere su contraseña</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 4: DIVISORIA — ENTORNO DE SIMULACIÓN [FIJO] ===================== -->
+    <div class="slide" id="slide4">
+        <div class="section-divider">
+            <div class="sd-icon">🖥️</div>
+            <div class="sd-eyebrow">Sección</div>
+            <h1>Entorno de Simulación</h1>
+            <p>Conoce la plataforma antes de empezar a competir</p>
+            <div class="sd-rule"></div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 5: MANUAL DEL SIMULADOR [FIJO] ===================== -->
+    <div class="slide" id="slide5">
+        <div class="slide-header">
+            <h1>📖 Manual del Simulador</h1>
+            <h2>Tu guía de referencia para cada decisión del periodo</h2>
+            <div class="slide-number">03</div>
+        </div>
+        <div class="slide-content">
+            <div class="plataforma-cols">
+                <div>
+                    <div class="cartelera-container" id="manual-container">
+                        <img class="cartelera-img" src="assets/manual-cover.png" alt="Portada del Manual de Business Strategy" loading="lazy"
+                             onclick="openLightbox('assets/manual-cover.png','Manual de Business Strategy')"
+                             onerror="this.closest('#manual-container').style.display='none'; var p=document.getElementById('manual-pending'); if(p) p.style.display='block';">
+                    </div>
+                    <div class="reserved" id="manual-pending" style="display:none;">
+                        <h3>📖 Foto del manual — pendiente de archivo</h3>
+                        <p>Guarda la portada o una captura del manual como <code>assets/manual-cover.png</code> en la carpeta del proyecto y aparecerá aquí automáticamente.</p>
+                    </div>
+                </div>
+                <div>
+                    <p style="color:#555;line-height:1.7;margin-bottom:24px;">El manual explica en detalle cada área de decisión, las fórmulas del simulador y cómo interpretar el Cuadro de Mando. Consúltalo siempre que tengas dudas antes de enviar tus decisiones.</p>
+                    <a href="assets/manual-businessstrategy.pdf" target="_blank" rel="noopener" class="phone-btn" style="display:block;text-decoration:none;padding:16px;font-size:0.95em;">📥 DESCARGAR EL MANUAL</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 6: ¿QUÉ ES? [VARIABLE] ===================== -->
+    <div class="slide" id="slide6">
+        <div class="slide-header">
+            <h1>¿Qué es Business Strategy?</h1>
+            <h2>Diriges una compañía global de vehículos eléctricos urbanos</h2>
+            <div class="slide-number">04</div>
+        </div>
+        <div class="slide-content">
+            <p style="color:#555;line-height:1.7;">Business Strategy es un simulador de gestión empresarial de CompanyGame. Tu compañía opera en el sector de la <strong style="color:var(--primary-dark);">movilidad eléctrica urbana</strong> y cubre toda la cadena de valor, desde el I+D y el diseño hasta la producción y la distribución. Compites directamente contra otras cuatro compañías por el liderazgo del mercado mundial.</p>
+            <div class="card-grid cols4">
+                <div class="card">
+                    <div class="card-icon">🎮</div>
+                    <h3>El Simulador</h3>
+                    <p>Una <strong>plataforma eLearning</strong> basada en un modelo de simulación. Aprendes gestionando: se recuerda el <strong>90%</strong> de lo que se hace frente al 10% de lo que se lee.</p>
+                </div>
+                <div class="card bd-amber">
+                    <div class="card-icon">👔</div>
+                    <h3>Tu Misión</h3>
+                    <p>Asumir el <strong>máximo puesto ejecutivo</strong> y aplicar de forma integrada conocimientos de <strong>Marketing, Operaciones, Logística y Finanzas</strong> en un entorno de competencia directa.</p>
+                </div>
+                <div class="card bd-teal">
+                    <div class="card-icon">🌍</div>
+                    <h3>El Escenario</h3>
+                    <p>Un sector en transformación, dominado por <strong>5 grandes empresas</strong> cerca de su capacidad máxima y en un clima de "excesiva tranquilidad". Hay que optar por nuevas estrategias de crecimiento.</p>
+                </div>
+                <div class="card bd-green">
+                    <div class="card-icon">⚡</div>
+                    <h3>3 Líneas de Producto</h3>
+                    <p><strong>🛴 Patinete</strong>, <strong>🚲 Bicicleta</strong> y <strong>🛵 Scooter</strong> eléctricos: transporte ecológico, práctico y eficiente para desplazarse por la ciudad.</p>
+                </div>
+            </div>
+            <div class="card-grid" style="margin-top:25px;">
+                <div class="card bd-purple">
+                    <div class="card-icon">🔄</div>
+                    <h3>Metodología de gestión</h3>
+                    <p>Estudiar el entorno y la competencia → fijar objetivos y estrategias → <strong>implantar los planes</strong> → <strong>controlar los resultados</strong>. La calidad de tu gestión condiciona tus resultados.</p>
+                </div>
+                <div class="card bd-red">
+                    <div class="card-icon">📈</div>
+                    <h3>El Objetivo</h3>
+                    <p>Alcanzar el <strong>máximo Valor de la Compañía</strong> al final de la simulación. En condiciones normales deberías incrementarlo <strong>al menos un 8% cada periodo</strong>.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <h3>Competencias que desarrollas</h3>
+                    <p>Aprendizaje autónomo, análisis, toma de decisiones, trabajo en equipo y comunicación escrita y oral. Experiencias que podrás <strong>trasladar al entorno real</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 7: CADENA DE VALOR [VARIABLE] ===================== -->
+    <div class="slide" id="slide7">
+        <div class="slide-header">
+            <h1>🔗 Cadena de Valor</h1>
+            <h2>De la fábrica al mercado: los procesos de negocio del simulador</h2>
+            <div class="slide-number">05</div>
+        </div>
+        <div class="slide-content">
+            <div class="value-chain vc-6">
+                <div class="chain-box"><span class="cb-emoji">🏭</span>Producción</div>
+                <div class="chain-arrow">▶</div>
+                <div class="chain-box cb-amber"><span class="cb-emoji">🚚</span>Logística</div>
+                <div class="chain-arrow">▶</div>
+                <div class="chain-box cb-teal"><span class="cb-emoji">🛴</span>Producto</div>
+                <div class="chain-arrow">▶</div>
+                <div class="chain-box cb-green"><span class="cb-emoji">📣</span>Marketing</div>
+                <div class="chain-arrow">▶</div>
+                <div class="chain-box"><span class="cb-emoji">🧑‍🤝‍🧑</span>Segmento</div>
+                <div class="chain-arrow">▶</div>
+                <div class="chain-box cb-amber"><span class="cb-emoji">🌍</span>Mercados</div>
+            </div>
+            <div class="card-grid cols4">
+                <div class="card">
+                    <div class="card-icon">🏭</div>
+                    <h3>Producción</h3>
+                    <p>Fábricas en <strong>9 países</strong> y <strong>3 tipologías</strong> (Big Producers, All in One, High Technology). La <strong>tecnología industrial</strong> multiplica capacidad y eficiencia.</p>
+                </div>
+                <div class="card bd-amber">
+                    <div class="card-icon">🚚</div>
+                    <h3>Logística</h3>
+                    <p>Almacén de fábrica, <strong>centro de servicio al cliente</strong>, almacén de distribución y la <strong>modalidad de transporte</strong> hacia cada mercado.</p>
+                </div>
+                <div class="card bd-teal">
+                    <div class="card-icon">🛴</div>
+                    <h3>Producto</h3>
+                    <p>Patinete, bicicleta y scooter eléctricos, con un <strong>nivel de innovación de 1 a 10</strong>, packaging y gama de producto.</p>
+                </div>
+                <div class="card bd-green">
+                    <div class="card-icon">📣</div>
+                    <h3>Marketing, segmentos y mercados</h3>
+                    <p><strong>Precio, marca y delegación comercial</strong> para llegar a Innovadores, Ahorradores y Prácticos en hasta <strong>9 áreas geográficas</strong>.</p>
+                </div>
+            </div>
+            <div style="margin-top:28px;">
+                <p style="color:#555;line-height:1.7;margin-bottom:14px;"><strong style="color:var(--primary-dark);">Procesos de apoyo</strong> que atraviesan toda la cadena:</p>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <span class="badge badge-orange">💰 Financiación (préstamos a largo y corto plazo)</span>
+                    <span class="badge badge-teal">💡 Innovación</span>
+                    <span class="badge badge-green">🎓 Capacitación</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 8: PRODUCCIÓN / INSUMOS [VARIABLE] ===================== -->
+    <div class="slide" id="slide8">
+        <div class="slide-header">
+            <h1>🏭 Producción y Fábricas</h1>
+            <h2>Tres tipos de fábrica, nueve países y la tecnología que multiplica tu capacidad</h2>
+            <div class="slide-number">06</div>
+        </div>
+        <div class="slide-content">
+            <h3 style="font-family:'Montserrat';color:var(--primary-dark);margin-bottom:6px;">Capacidad de producción por tipo de fábrica</h3>
+            <p style="color:#666;font-size:0.95em;">Unidades por línea de producto y tipología de planta (ampliable con la tecnología industrial).</p>
+            <table class="data-table">
+                <thead>
+                    <tr><th>Línea de producto</th><th>Fábrica 1 · BP<br>Big Producers</th><th>Fábrica 2 · AIO<br>All in One</th><th>Fábrica 3 · HT<br>High Technology</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>🚲 Bici eléctrica</td><td>80.000</td><td>50.000</td><td>30.000</td></tr>
+                    <tr><td>🛴 Patinete eléctrico</td><td>300.000</td><td>200.000</td><td>100.000</td></tr>
+                    <tr><td>🛵 Scooter eléctrica</td><td>6.500</td><td>17.000</td><td>20.000</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="font-family:'Montserrat';color:var(--primary-dark);margin:34px 0 6px;">Adquisición de fábricas por país</h3>
+            <p style="color:#666;font-size:0.95em;">Inversión, coste de implantación y rango de tecnología industrial.</p>
+            <table class="data-table">
+                <thead>
+                    <tr><th>País</th><th>Tipología</th><th>Inversión</th><th>Implantación</th><th>Tec. Industrial</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>🇩🇪 Alemania</td><td>High Technology</td><td>26.840.000</td><td>3.400.000</td><td>6–10</td></tr>
+                    <tr><td>🇺🇸 USA</td><td>High Technology</td><td>23.300.000</td><td>4.100.000</td><td>6–10</td></tr>
+                    <tr><td>🇯🇵 Japón</td><td>High Technology</td><td>24.320.000</td><td>4.750.000</td><td>6–10</td></tr>
+                    <tr><td>🇲🇽 México</td><td>All in One</td><td>14.730.000</td><td>1.600.000</td><td>4–8</td></tr>
+                    <tr><td>🇪🇸 España</td><td>All in One</td><td>16.400.000</td><td>2.200.000</td><td>4–8</td></tr>
+                    <tr><td>🇲🇾 Malasia</td><td>All in One</td><td>14.730.000</td><td>1.750.000</td><td>4–8</td></tr>
+                    <tr><td>🇨🇳 China</td><td>Big Producers</td><td>9.080.000</td><td>1.100.000</td><td>1–5</td></tr>
+                    <tr><td>🇲🇩 Moldavia</td><td>Big Producers</td><td>8.080.000</td><td>1.000.000</td><td>1–5</td></tr>
+                    <tr><td>🇵🇾 Paraguay</td><td>Big Producers</td><td>7.950.000</td><td>850.000</td><td>1–5</td></tr>
+                </tbody>
+            </table>
+            <p style="color:#666;font-size:0.9em;margin-top:10px;">💡 El coste de implantación puede reducirse <strong>hasta un 50%</strong> si ya tienes una fábrica en el país y del mismo tipo que la nueva.</p>
+
+            <div class="card-grid cols4" style="margin-top:30px;">
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Tecnología Industrial</h3>
+                    <p>Elevarla mejora <strong>fiabilidad, eficiencia, producción y flexibilidad</strong>. Solo sube <strong>1 nivel por periodo</strong>.</p>
+                </div>
+                <div class="card bd-teal">
+                    <div class="card-icon">💡</div>
+                    <h3>Innovación de Producto</h3>
+                    <p>Escala de <strong>1 a 10</strong>. Aumenta el atractivo pero encarece los componentes <strong>hasta un 28%</strong>. Solo <strong>+1 nivel por periodo</strong>.</p>
+                </div>
+                <div class="card bd-amber">
+                    <div class="card-icon">🔧</div>
+                    <h3>Fábrica ↔ Innovación</h3>
+                    <p>Con productos de innovación 8–10, una <strong>Big Producer</strong> rinde al 75% y una All in One al 90%; la <strong>High Technology</strong> mantiene el 100%.</p>
+                </div>
+                <div class="card bd-green">
+                    <div class="card-icon">📦</div>
+                    <h3>Inventario y Stock</h3>
+                    <p>Lo no vendido queda en stock y paga almacenaje. Cuidado: a los <strong>6 meses el producto se vuelve obsoleto</strong> y va a pérdidas.</p>
+                </div>
+            </div>
+
+            <div class="card-grid" style="margin-top:25px;">
+                <div class="card bd-purple">
+                    <div class="card-icon">🧾</div>
+                    <h3>Estructura de costes</h3>
+                    <p>Costes de <strong>componentes, personal y energía</strong> (variables), <strong>logística interna, almacenaje y transporte</strong>, más <strong>amortizaciones y gastos generales</strong> (fijos). Se imputan sobre las unidades <strong>vendidas</strong>, no las producidas.</p>
+                </div>
+                <div class="card bd-red">
+                    <div class="card-icon">🚦</div>
+                    <h3>Flexibilidad de producción</h3>
+                    <p>El simulador ajusta automáticamente la producción a las ventas estimadas, con variaciones de <strong>hasta un 16%</strong> según el tipo de fábrica, para reducir inventario o atender demanda.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 9: ÁREAS DE DECISIÓN [VARIABLE] ===================== -->
+    <div class="slide" id="slide9">
+        <div class="slide-header">
+            <h1>⚙️ Áreas de Decisión</h1>
+            <h2>Todo lo que decides como director cada periodo</h2>
+            <div class="slide-number">07</div>
+        </div>
+        <div class="slide-content">
+            <p style="color:#555;line-height:1.7;">Cada periodo tomas un conjunto de decisiones que definen la estrategia de tu compañía. <strong style="color:var(--primary-dark);">Recuerda guardar siempre las decisiones</strong>: aunque repitas las del periodo anterior, si no las guardas el simulador las considera «no tomadas» y reduce tu competitividad.</p>
+            <div class="card-grid cols4">
+                <div class="card">
+                    <div class="card-icon">🏭</div>
+                    <h3>Nuevas fábricas</h3>
+                    <p>Eliges país y tipología para ganar capacidad. <em>Máx. 1 por periodo · 3 en la simulación.</em></p>
+                </div>
+                <div class="card bd-amber">
+                    <div class="card-icon">🌍</div>
+                    <h3>Nuevos mercados</h3>
+                    <p>Diversificas la comercialización. <em>Máx. 2 por periodo · 6 en la simulación.</em></p>
+                </div>
+                <div class="card bd-teal">
+                    <div class="card-icon">📊</div>
+                    <h3>Producción</h3>
+                    <p>Unidades a producir por producto y fábrica. Puedes cesar una línea de producción.</p>
+                </div>
+                <div class="card bd-green">
+                    <div class="card-icon">🏷️</div>
+                    <h3>Precios</h3>
+                    <p>Precio de venta por producto y mercado. Si lo dejas en cero, se asume el del periodo anterior.</p>
+                </div>
+                <div class="card bd-red">
+                    <div class="card-icon">📣</div>
+                    <h3>Promoción</h3>
+                    <p>Presupuesto por mercado y producto para incrementar el valor de marca.</p>
+                </div>
+                <div class="card bd-purple">
+                    <div class="card-icon">🤝</div>
+                    <h3>Delegación comercial</h3>
+                    <p>Potencia la promoción en los mercados donde estás presente. Disponible desde el periodo 1.</p>
+                </div>
+                <div class="card bd-teal">
+                    <div class="card-icon">💡</div>
+                    <h3>Innovación de producto</h3>
+                    <p>Gasto para subir el nivel de innovación de cada línea (escala 1–10).</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Tecnología industrial</h3>
+                    <p>Gasto para mejorar el nivel tecnológico de cada tipo de fábrica.</p>
+                </div>
+                <div class="card bd-amber">
+                    <div class="card-icon">🚚</div>
+                    <h3>Logística</h3>
+                    <p>Almacén avanzado en fábrica, centro de servicio al cliente, almacén de distribución y modalidad de transporte.</p>
+                </div>
+                <div class="card bd-green">
+                    <div class="card-icon">🎓</div>
+                    <h3>Capacitación</h3>
+                    <p>Gasto en formación del personal y priorización de áreas (escala 1 a 5).</p>
+                </div>
+                <div class="card bd-red">
+                    <div class="card-icon">💰</div>
+                    <h3>Financiación</h3>
+                    <p>Préstamos a largo plazo. Si falta liquidez, se genera automáticamente un crédito a corto plazo más caro.</p>
+                </div>
+                <div class="card bd-purple">
+                    <div class="card-icon">🕵️</div>
+                    <h3>Consultor</h3>
+                    <p>Desde el Despacho compras informes de mercado y de la competencia para decidir mejor.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 10: SEGMENTOS [VARIABLE] ===================== -->
+    <div class="slide" id="slide10">
+        <div class="slide-header">
+            <h1>🎯 Segmentos</h1>
+            <h2>A quién le vendes y en qué mercados compites</h2>
+            <div class="slide-number">08</div>
+        </div>
+        <div class="slide-content">
+            <div class="two-col">
+                <div>
+                    <h3 style="font-family:'Montserrat';color:var(--primary-dark);margin-bottom:14px;">🧑‍🤝‍🧑 Segmentos de demanda</h3>
+                    <div class="seg-row" style="background:#D4F1F9;">
+                        <span class="seg-emoji">🚀</span>
+                        <div><strong>Innovadores</strong><br><small>Valoran la tecnología por encima del precio. Exigen un producto tecnológicamente muy avanzado.</small></div>
+                    </div>
+                    <div class="seg-row" style="background:#E8E6F7;">
+                        <span class="seg-emoji">💰</span>
+                        <div><strong>Ahorradores</strong><br><small>Deciden por precio. Clave: control de costes y máxima fiabilidad a precios ajustados.</small></div>
+                    </div>
+                    <div class="seg-row" style="background:#E8F5E9;">
+                        <span class="seg-emoji">🛠️</span>
+                        <div><strong>Prácticos</strong><br><small>Valoran la cantidad de prestaciones del producto; la marca pesa más para ellos.</small></div>
+                    </div>
+                    <p style="color:#666;font-size:0.9em;margin-top:14px;line-height:1.6;">El <strong>peso de cada segmento cambia según el mercado</strong>: tendencias de la demanda, fase del ciclo de vida del producto y poder adquisitivo de la población.</p>
+                </div>
+                <div>
+                    <h3 style="font-family:'Montserrat';color:var(--primary-dark);margin-bottom:14px;">🌍 Mercados y competidores</h3>
+                    <p style="color:#555;line-height:1.7;margin-bottom:12px;">Puedes vender en <strong>9 áreas geográficas</strong> con distinta población y PIB per cápita:</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+                        <span class="badge badge-orange">América Central y Sur</span>
+                        <span class="badge badge-orange">China</span>
+                        <span class="badge badge-orange">India</span>
+                        <span class="badge badge-teal">Japón y Corea</span>
+                        <span class="badge badge-teal">USA y Canadá</span>
+                        <span class="badge badge-teal">Resto de Asia</span>
+                        <span class="badge badge-green">Rusia y Europa no UE</span>
+                        <span class="badge badge-green">UE Occidental</span>
+                        <span class="badge badge-green">UE Oriental</span>
+                    </div>
+                    <p style="color:#555;line-height:1.7;">Compiten <strong>5 compañías</strong> que parten de mercados y fábricas distintos: <strong>Alfa</strong> (Alemania), <strong>Beta</strong> (China), <strong>Delta</strong> (México), <strong>Gama</strong> (USA) y <strong>Omega</strong> (Japón). Observa bien la primera decisión de cada equipo.</p>
+                    <p style="color:#666;font-size:0.9em;margin-top:12px;line-height:1.6;">📈 La demanda <strong>potencial</strong> es la que puede llegar a darse; la <strong>actual</strong>, la que ya se está produciendo. Cuantas más empresas compiten en un mercado, más crece su demanda actual.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 11: VALOR DE LA COMPAÑÍA [VARIABLE] ===================== -->
+    <div class="slide" id="slide11">
+        <div class="slide-header">
+            <h1>🏆 Valor de la Compañía</h1>
+            <h2>La métrica que define el ranking final — y cómo se compone</h2>
+            <div class="slide-number">09</div>
+        </div>
+        <div class="slide-content">
+            <p style="color:#555;line-height:1.7;">El <strong style="color:var(--primary-dark);">Valor de la Compañía</strong> representa la cotización que le asignan los inversores: pondera los resultados de los últimos periodos y las expectativas de futuro. Según el Valor alcanzado por cada participante se establece el <strong>ranking final</strong>. Haz clic en cada factor para ver el detalle.</p>
+            <div class="factor-accordion">
+                <div class="factor-item">
+                    <div class="factor-header factor-orange" onclick="toggleFactor(this)">
+                        <span>💰 Resultados Económicos</span>
+                        <span style="display:flex;align-items:center;gap:12px;"><span class="factor-tag">41%</span><span class="factor-icon">▼</span></span>
+                    </div>
+                    <div class="factor-body"><div class="factor-content">
+                        <p><strong>Descripción:</strong> se vincula directamente con los beneficios obtenidos por la compañía.</p>
+                        <p><strong>¿Qué evalúa?</strong> Tanto el valor alcanzado en cada periodo como la evolución de los últimos periodos.</p>
+                        <div class="factor-consejo"><strong>Consejo:</strong> es el factor de mayor peso. Cuida el margen: precio, control de costes y rotación de inventario.</div>
+                    </div></div>
+                </div>
+                <div class="factor-item">
+                    <div class="factor-header factor-teal" onclick="toggleFactor(this)">
+                        <span>🚚 Eficiencia Logística</span>
+                        <span style="display:flex;align-items:center;gap:12px;"><span class="factor-tag">13%</span><span class="factor-icon">▼</span></span>
+                    </div>
+                    <div class="factor-body"><div class="factor-content">
+                        <p><strong>Descripción:</strong> nivel de eficiencia y rendimiento alcanzado en la cadena logística.</p>
+                        <p><strong>¿Qué evalúa?</strong> La existencia y calidad de los componentes logísticos, en una escala de 1 a 10.</p>
+                        <div class="factor-consejo"><strong>Consejo:</strong> produce cerca de tus mercados, prioriza bien las relaciones país-mercado y elige la modalidad de transporte adecuada.</div>
+                    </div></div>
+                </div>
+                <div class="factor-item">
+                    <div class="factor-header factor-green" onclick="toggleFactor(this)">
+                        <span>💡 Innovación de Producto</span>
+                        <span style="display:flex;align-items:center;gap:12px;"><span class="factor-tag">13%</span><span class="factor-icon">▼</span></span>
+                    </div>
+                    <div class="factor-body"><div class="factor-content">
+                        <p><strong>Descripción:</strong> nivel de innovación de tus productos.</p>
+                        <p><strong>¿Qué evalúa?</strong> La evolución en una escala de 1 (menor nivel) a 10 (mayor nivel).</p>
+                        <div class="factor-consejo"><strong>Consejo:</strong> alinea la innovación con el tipo de fábrica; producir alta innovación en Big Producers dispara los costes.</div>
+                    </div></div>
+                </div>
+                <div class="factor-item">
+                    <div class="factor-header factor-amber" onclick="toggleFactor(this)">
+                        <span>⭐ Valor de Marca</span>
+                        <span style="display:flex;align-items:center;gap:12px;"><span class="factor-tag">13%</span><span class="factor-icon">▼</span></span>
+                    </div>
+                    <div class="factor-body"><div class="factor-content">
+                        <p><strong>Descripción:</strong> valoración alcanzada por la marca de la compañía.</p>
+                        <p><strong>¿Qué evalúa?</strong> La percepción de la marca entre los segmentos de demanda, en una escala de 10 a 100.</p>
+                        <div class="factor-consejo"><strong>Consejo:</strong> la promoción y la delegación comercial construyen marca; es una inversión a medio plazo.</div>
+                    </div></div>
+                </div>
+                <div class="factor-item">
+                    <div class="factor-header factor-blue" onclick="toggleFactor(this)">
+                        <span>⚙️ Tecnología Industrial</span>
+                        <span style="display:flex;align-items:center;gap:12px;"><span class="factor-tag">10%</span><span class="factor-icon">▼</span></span>
+                    </div>
+                    <div class="factor-body"><div class="factor-content">
+                        <p><strong>Descripción:</strong> valor alcanzado en el nivel de tecnología industrial de tus plantas.</p>
+                        <p><strong>¿Qué evalúa?</strong> El nivel tecnológico de cada tipo de fábrica, que define fiabilidad, eficiencia, producción y flexibilidad.</p>
+                        <div class="factor-consejo"><strong>Consejo:</strong> solo puedes subir 1 nivel por periodo, así que invierte de forma sostenida desde el inicio.</div>
+                    </div></div>
+                </div>
+                <div class="factor-item">
+                    <div class="factor-header factor-red" onclick="toggleFactor(this)">
+                        <span>🏦 Endeudamiento y Solvencia</span>
+                        <span style="display:flex;align-items:center;gap:12px;"><span class="factor-tag">10%</span><span class="factor-icon">▼</span></span>
+                    </div>
+                    <div class="factor-body"><div class="factor-content">
+                        <p><strong>Descripción:</strong> nivel de endeudamiento y solvencia de la compañía.</p>
+                        <p><strong>¿Qué evalúa?</strong> Las obligaciones (préstamos y proveedores) frente a los recursos propios y el beneficio.</p>
+                        <div class="factor-consejo"><strong>Consejo:</strong> evita el crédito extraordinario a corto plazo (más caro); planifica la financiación a largo plazo.</div>
+                    </div></div>
+                </div>
+            </div>
+            <p style="color:#666;font-size:0.92em;margin-top:20px;text-align:center;">En condiciones normales, deberías ser capaz de <strong style="color:var(--primary-dark);">incrementar el Valor de tu compañía al menos un 8% cada periodo</strong>.</p>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 12: DIVISORIA — CUADRO DE MANDO [FIJO] ===================== -->
+    <div class="slide" id="slide12">
+        <div class="section-divider">
+            <div class="sd-icon">📊</div>
+            <div class="sd-eyebrow">Sección</div>
+            <h1>Cuadro de Mando</h1>
+            <p>Así verás los resultados de tu empresa en el simulador</p>
+            <div class="sd-rule"></div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 13: CUADRO DE MANDO [VARIABLE] ===================== -->
+    <div class="slide" id="slide13">
+        <div class="slide-header">
+            <h1>📊 Cuadro de Mando</h1>
+            <h2>Los 10 informes que analizas para dirigir tu compañía</h2>
+            <div class="slide-number">10</div>
+        </div>
+        <div class="slide-content">
+            <div class="cm-grid">
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-valor.jpg" alt="Valor de la compañía" loading="lazy"
+                        onclick="openLightbox('assets/cm-valor.jpg','Valor de la compañía')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🏆 Valor</h3><span class="cm-badge">Resultado</span></div>
+                        <p class="cm-desc">Valor de la compañía de Alfa, Beta, Delta, Gama y Omega frente al periodo anterior: diferencia y variación porcentual.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Es la métrica del <strong>ranking final</strong>. Te dice si tu estrategia funciona y si creces al menos el 8 % esperado por periodo.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-indicadores.jpg" alt="Indicadores clave de la compañía" loading="lazy"
+                        onclick="openLightbox('assets/cm-indicadores.jpg','Indicadores clave de la compañía')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🎯 Indicadores Clave</h3><span class="cm-badge">KPIs</span></div>
+                        <p class="cm-desc">Unidades, participación, ingresos, margen, beneficios, endeudamiento, capacidad y ocupación de fábricas, inventario, marca, producto, tecnología, eficiencia logística y capacidades.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Resume en una sola tabla <strong>todos los factores</strong> que alimentan el Valor de la Compañía. Empieza siempre por aquí.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-mercado.jpg" alt="Unidades vendidas por producto y mercado" loading="lazy"
+                        onclick="openLightbox('assets/cm-mercado.jpg','Unidades vendidas por producto y mercado')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🌍 Mercado</h3><span class="cm-badge">Mercado</span></div>
+                        <p class="cm-desc">Peso de cada mercado en las ventas totales de bicis, patinetes y scooters, y la evolución sectorial de las ventas.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Muestra <strong>dónde está la demanda</strong> y cómo crece el sector. Es la base para decidir a qué nuevo mercado entrar.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-marca.jpg" alt="Valor de marca por mercado y producto" loading="lazy"
+                        onclick="openLightbox('assets/cm-marca.jpg','Valor de marca por mercado y producto')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>⭐ Marca</h3><span class="cm-badge">Marketing</span></div>
+                        <p class="cm-desc">Valor de marca de tu compañía en cada mercado y producto (escala 10 a 100), con su evolución.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Te indica si tu <strong>inversión en promoción</strong> está rindiendo y dónde reforzarla. La marca pesa un 13 % del Valor.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-precios.jpg" alt="Nivel de precios por compañía" loading="lazy"
+                        onclick="openLightbox('assets/cm-precios.jpg','Nivel de precios por compañía')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>💲 Precios</h3><span class="cm-badge">Competencia</span></div>
+                        <p class="cm-desc">Precio de cada compañía por mercado y producto.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Saber a qué precio vende <strong>la competencia</strong> te permite posicionarte frente a Innovadores, Ahorradores y Prácticos.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-produccion.jpg" alt="Capacidad de producción por compañía" loading="lazy"
+                        onclick="openLightbox('assets/cm-produccion.jpg','Capacidad de producción por compañía')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🏭 Producción</h3><span class="cm-badge">Operaciones</span></div>
+                        <p class="cm-desc">Capacidad y producción real por tipo de fábrica, ocupación, unidades vendidas y obsoletas, inventario, coste unitario, costes de no calidad y logística.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Detecta si te falta capacidad, si acumulas <strong>inventario</strong> o si los costes ocultos se comen tu margen.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-logistica.jpg" alt="Costes de almacenaje y logística" loading="lazy"
+                        onclick="openLightbox('assets/cm-logistica.jpg','Costes de almacenaje y análisis de coste logístico')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🚚 Logística</h3><span class="cm-badge">Logística</span></div>
+                        <p class="cm-desc">Coste de almacenaje según el % de inventario sobre ventas, y tu coste logístico (transporte, almacenaje y packaging) por producto.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">El almacenaje puede llegar a más del <strong>20 % del coste unitario</strong> si acumulas stock. Ajusta producción y logística para no perder margen.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-ventas.jpg" alt="Unidades vendidas e ingresos por producto y mercado" loading="lazy"
+                        onclick="openLightbox('assets/cm-ventas.jpg','Unidades vendidas e ingresos por producto y mercado')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>📦 Ventas e Ingresos</h3><span class="cm-badge">Ventas</span></div>
+                        <p class="cm-desc">Unidades vendidas e ingresos de tu compañía por mercado y producto, comparados con el periodo anterior.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Revela tu <strong>dependencia</strong> de un solo mercado o producto y te ayuda a ajustar la producción del siguiente periodo.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-resultados.jpg" alt="Cuenta de resultados" loading="lazy"
+                        onclick="openLightbox('assets/cm-resultados.jpg','Cuenta de resultados')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>📈 Cuenta de Resultados</h3><span class="cm-badge">Finanzas</span></div>
+                        <p class="cm-desc">De los ingresos al beneficio después de impuestos: costes de fabricación, logística y calidad, margen, gastos de estructura y gastos financieros.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Los resultados económicos pesan el <strong>41 %</strong> del Valor de la Compañía. Aquí ves qué partida mejora o empeora tu beneficio.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/cm-balance.jpg" alt="Balance de la compañía" loading="lazy"
+                        onclick="openLightbox('assets/cm-balance.jpg','Balance de la compañía')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>⚖️ Balance</h3><span class="cm-badge">Finanzas</span></div>
+                        <p class="cm-desc">Caja, cuentas por cobrar, inventarios, planta y equipos, crédito extraordinario, proveedores, préstamos y patrimonio neto.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Controla tu <strong>caja y endeudamiento</strong> antes de invertir en fábricas o pedir préstamos. Evita el crédito extraordinario.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 14: DIVISORIA — EL CONSULTOR [añadida a pedido para Business Strategy] ===================== -->
+    <div class="slide" id="slide14">
+        <div class="section-divider">
+            <div class="sd-icon">🕵️</div>
+            <div class="sd-eyebrow">Sección</div>
+            <h1>El Consultor</h1>
+            <p>Informes que puedes comprar para conocer mejor el mercado y a tu competencia</p>
+            <div class="sd-rule"></div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 15: EL CONSULTOR [VARIABLE] ===================== -->
+    <div class="slide" id="slide15">
+        <div class="slide-header">
+            <h1>🕵️ El Consultor</h1>
+            <h2>Informes internos e informes externos para decidir con más información</h2>
+            <div class="slide-number">11</div>
+        </div>
+        <div class="slide-content">
+            <p style="color:#555;line-height:1.7;">Además del Cuadro de Mando, en el <strong style="color:var(--primary-dark);">Despacho</strong> encontrarás al <strong>Consultor</strong>, que te ofrece informes más detallados que puedes comprar para seguir la estrategia de los demás equipos. Marca con un tick los que quieras (desde <strong>10.000 $/€</strong> cada uno) y envía la decisión. Los informes que compras en un periodo <strong>los recibes en el siguiente</strong> y se consultan en la pestaña <em>Informes</em>.</p>
+            <div class="cartelera-container" style="max-width:560px;margin-left:auto;margin-right:auto;">
+                <img class="cartelera-img" src="assets/cons-consultor.jpg" alt="Pantalla del Consultor: compra de informes" loading="lazy"
+                     onclick="openLightbox('assets/cons-consultor.jpg','El Consultor — compra de informes')">
+                <div class="cartelera-caption">Pantalla del Consultor: marca los informes que quieres comprar y pulsa Guardar</div>
+            </div>
+            <div class="cm-grid">
+                <div class="cm-card">
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🏢 Informes Internos</h3><span class="cm-badge">Competencia</span></div>
+                        <p class="cm-desc">Datos de las compañías del sector: beneficios, capacidades, demanda estimada vs. ventas, fábricas, ingresos, innovación, notoriedad, inversión en promoción, nivel tecnológico por fábrica y ventas.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Comprar información a tiempo te permite <strong>anticiparte a los movimientos</strong> de tus rivales y descubrir en qué te superan.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🌐 Informes Externos</h3><span class="cm-badge">Mercado</span></div>
+                        <p class="cm-desc">Estudios del entorno: situación y potencialidad de cada uno de los mercados y productos, más allá de la información del Cuadro de Mando.</p>
+                        <span class="cm-why-label">💡 Por qué analizarlo</span>
+                        <p class="cm-why-text">Son clave antes de <strong>entrar en un nuevo mercado</strong> o construir una fábrica: decisiones que no podrás deshacer.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🧾 Antes de comprar</h3><span class="cm-badge">Reglas</span></div>
+                        <p class="cm-desc">Puedes adquirir <strong>todos los informes que desees</strong>, pero cada uno es un gasto para tu compañía.</p>
+                        <span class="cm-why-label">⚠️ Ten en cuenta</span>
+                        <p class="cm-why-text">Una vez <strong>enviada la decisión no podrás modificarla</strong>. Define con tu equipo qué preguntas quieres responder y compra solo la información que vas a usar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 16: DIVISORIA — DECISIONES DEL SIMULADOR [FIJO] ===================== -->
+    <div class="slide" id="slide16">
+        <div class="section-divider">
+            <div class="sd-icon">🕹️</div>
+            <div class="sd-eyebrow">Sección</div>
+            <h1>Las Decisiones del Simulador</h1>
+            <p>Las pantallas donde introduces tus decisiones cada periodo</p>
+            <div class="sd-rule"></div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 17: DECISIONES DEL SIMULADOR [VARIABLE] ===================== -->
+    <div class="slide" id="slide17">
+        <div class="slide-header">
+            <h1>🕹️ Las Decisiones del Simulador</h1>
+            <h2>Las 10 pestañas donde tu equipo decide cada periodo</h2>
+            <div class="slide-number">12</div>
+        </div>
+        <div class="slide-content">
+            <div class="cm-grid">
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-estrategicas.jpg" alt="Decisiones estratégicas" loading="lazy"
+                        onclick="openLightbox('assets/dec-estrategicas.jpg','Decisiones estratégicas')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🌍&nbsp;1&nbsp;·&nbsp;Estratégicas</h3><span class="cm-badge">Expansión</span></div>
+                        <p class="cm-desc">Decides si <strong>construyes nuevas fábricas</strong> o <strong>entras en nuevos mercados</strong>, y comparas tu gasto en promoción, innovación y tecnología con el presupuesto disponible.</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Es la <strong>primera pestaña</strong> que debes completar: define tu crecimiento y, una vez enviadas, estas decisiones quedan bloqueadas.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-precios.jpg" alt="Decisiones de precios" loading="lazy"
+                        onclick="openLightbox('assets/dec-precios.jpg','Decisiones de precios')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>💲&nbsp;2&nbsp;·&nbsp;Precios</h3><span class="cm-badge">Marketing</span></div>
+                        <p class="cm-desc">Fijas el precio de la bici, el patinete y la scooter en cada mercado, con los precios de referencia como guía.</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Si abres un mercado, pon su precio <strong>ese mismo periodo</strong> o no podrás hacerlo después. Y una vez vendes en un mercado, no puedes retirarte.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-producto.jpg" alt="Decisiones de producto" loading="lazy"
+                        onclick="openLightbox('assets/dec-producto.jpg','Decisiones de producto: packaging y gama')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🛴&nbsp;3&nbsp;·&nbsp;Producto</h3><span class="cm-badge">Producto</span></div>
+                        <p class="cm-desc">Eliges el nivel de <strong>packaging</strong> por mercado y producto, y la <strong>gama de producto</strong> de cada línea (niveles 1 a 5).</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Más nivel hace el producto <strong>más atractivo</strong>, pero también eleva los costes logísticos y de fabricación.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-promocion.jpg" alt="Decisiones de promoción" loading="lazy"
+                        onclick="openLightbox('assets/dec-promocion.jpg','Decisiones de promoción y delegación comercial')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>📣&nbsp;4&nbsp;·&nbsp;Promoción</h3><span class="cm-badge">Marketing</span></div>
+                        <p class="cm-desc">Asignas el presupuesto de promoción por mercado y producto y, desde el periodo 1, puedes instalar una <strong>delegación comercial</strong> (1,5 % de los ingresos del mercado).</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Construye el <strong>valor de marca</strong>, que pesa un 13 % en el Valor de la Compañía.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-innovacion.jpg" alt="Decisiones de innovación y tecnología industrial" loading="lazy"
+                        onclick="openLightbox('assets/dec-innovacion.jpg','Decisiones de innovación y tecnología industrial')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>💡&nbsp;5&nbsp;·&nbsp;Innovación</h3><span class="cm-badge">I+D</span></div>
+                        <p class="cm-desc">Inviertes en <strong>innovación de producto</strong> (por línea) y en <strong>tecnología industrial</strong> (por tipo de fábrica).</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Mejora atractivo, costes, capacidad y fiabilidad. Ambos factores suman un <strong>23 %</strong> del Valor de la Compañía.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-produccion.jpg" alt="Decisiones de producción" loading="lazy"
+                        onclick="openLightbox('assets/dec-produccion.jpg','Decisiones de producción')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🏭&nbsp;6&nbsp;·&nbsp;Producción</h3><span class="cm-badge">Operaciones</span></div>
+                        <p class="cm-desc">Decides cuántas unidades fabricar de cada producto en cada fábrica, o <strong>cesas la producción</strong> de una línea. El simulador te indica la limitación de unidades.</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Lo que no vendas queda en <strong>inventario</strong> y a los 6 meses se vuelve obsoleto; producir poco te hace perder ventas.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-logistica.jpg" alt="Decisiones de logística" loading="lazy"
+                        onclick="openLightbox('assets/dec-logistica.jpg','Decisiones de logística')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🚚&nbsp;7&nbsp;·&nbsp;Logística</h3><span class="cm-badge">Logística</span></div>
+                        <p class="cm-desc">Eliges hasta <strong>dos opciones</strong> entre almacén de fábrica, centro de servicio al cliente y centros de distribución, y la modalidad de transporte por categoría.</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Mejora tu <strong>eficiencia logística</strong> (13 % del Valor). Ojo: un almacén de distribución no se puede cerrar después.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-priorizacion.jpg" alt="Priorización de ventas país-mercado" loading="lazy"
+                        onclick="openLightbox('assets/dec-priorizacion.jpg','Priorización de ventas país-mercado')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🗺️&nbsp;8&nbsp;·&nbsp;Priorización Ventas</h3><span class="cm-badge">Logística</span></div>
+                        <p class="cm-desc">Indicas qué prioridad tiene cada relación <strong>país de fabricación → mercado</strong> (1 = máxima prioridad).</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Dar máxima prioridad a relaciones de <strong>categoría 5 o superior</strong> dispara los costes de transporte.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-capacitacion.jpg" alt="Decisiones de capacitación" loading="lazy"
+                        onclick="openLightbox('assets/dec-capacitacion.jpg','Decisiones de capacitación')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🎓&nbsp;9&nbsp;·&nbsp;Capacitación</h3><span class="cm-badge">Talento</span></div>
+                        <p class="cm-desc">Defines el presupuesto de desarrollo de capacidades y repartes hasta <strong>21 puntos</strong> de prioridad (1 a 5) entre siete áreas de la organización.</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">A mayor nivel de capacidades, <strong>mayor rendimiento</strong> obtienes de cada peso invertido en innovación y tecnología.</p>
+                    </div>
+                </div>
+                <div class="cm-card">
+                    <div class="cm-img"><img src="assets/dec-financiacion.jpg" alt="Decisiones de financiación" loading="lazy"
+                        onclick="openLightbox('assets/dec-financiacion.jpg','Decisiones de financiación')"></div>
+                    <div class="cm-body">
+                        <div class="cm-titlerow"><h3>🏦&nbsp;10&nbsp;·&nbsp;Financiación</h3><span class="cm-badge">Finanzas</span></div>
+                        <p class="cm-desc">Solicitas préstamos a largo o corto plazo, con tu balance de situación como referencia.</p>
+                        <span class="cm-why-label">💡 Por qué importa</span>
+                        <p class="cm-why-text">Son más baratos que el crédito extraordinario, pero el banco los limita. Con <strong>Recursos Propios negativos</strong> no tendrás préstamos a largo plazo.</p>
+                    </div>
+                </div>
+            </div>
+            <p style="color:#666;font-size:0.92em;margin-top:24px;text-align:center;">💾 Al terminar, pulsa <strong style="color:var(--primary-dark);">GUARDAR</strong>: aunque repitas las decisiones del periodo anterior, si no las guardas se consideran no tomadas.</p>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 18: MÉTODOS DE IMPLEMENTACIÓN ===================== -->
+    <div class="slide" id="slide18">
+        <div class="slide-header">
+            <h1>📚 Métodos de Implementación</h1>
+            <h2>Cuatro formas de integrar el simulador en tu programa académico</h2>
+            <div class="slide-number">13</div>
+        </div>
+        <div class="slide-content">
+
+            <!-- MÉTODO DEDUCTIVO -->
+            <div class="method m-orange">
+                <div class="method-head">
+                    <h3>🔵 Método Deductivo</h3>
+                    <div class="method-quote">"El simulador como herramienta de demostración de aprendizaje"</div>
+                </div>
+                <div class="method-body">
+                    <div class="tl-title">Línea de Tiempo de Implementación</div>
+                    <div class="tl-sub">Parte de la teoría hacia la práctica. Ideal para validar conocimientos previos.</div>
+                    <div class="tl"><div class="tl-track">
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 0</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 6</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 12</span></div>
+                        <div class="tl-node"><span class="tl-act">📖</span><span class="tl-label above">Manual</span></div>
+                        <div class="tl-node"><span class="tl-act">📊</span><span class="tl-label below">Cuadro de Mando</span></div>
+                        <div class="tl-node"><span class="tl-act">🎮</span><span class="tl-label above">Decisión 1</span></div>
+                        <div class="tl-node"><span class="tl-act">🎮</span><span class="tl-label below">Decisión 2</span></div>
+                        <div class="tl-node"><span class="tl-act">🏁</span><span class="tl-label above">Decisión Final</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 16</span></div>
+                    </div></div>
+                    <div class="features">
+                        <h4>📋 Características</h4>
+                        <ul>
+                            <li>Comienzas estudiando el manual y la teoría antes de decidir</li>
+                            <li>La primera ronda de decisiones ya está fundamentada en los conceptos aprendidos</li>
+                            <li>Análisis de resultados mediante el Cuadro de Mando</li>
+                            <li>El simulador demuestra y valida la teoría en la práctica</li>
+                            <li>Cierre consolidando teoría + evidencia de resultados</li>
+                        </ul>
+                        <div class="ideal"><strong>✅ Ideal para:</strong> Asignaturas formales, cursos con base teórica previa, evaluación de competencias.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÉTODO INDUCTIVO -->
+            <div class="method m-green">
+                <div class="method-head">
+                    <h3>🟢 Método Inductivo</h3>
+                    <div class="method-quote">"El simulador como herramienta que motiva el aprendizaje"</div>
+                </div>
+                <div class="method-body">
+                    <div class="tl-title">Línea de Tiempo de Implementación</div>
+                    <div class="tl-sub">Parte de la experiencia práctica hacia la teoría. Aprendizaje por descubrimiento.</div>
+                    <div class="tl"><div class="tl-track">
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 0</span></div>
+                        <div class="tl-node"><span class="tl-act">📖</span><span class="tl-label above">Manual</span></div>
+                        <div class="tl-node"><span class="tl-act">📊</span><span class="tl-label below">Cuadro de Mando</span></div>
+                        <div class="tl-node"><span class="tl-act">🎮</span><span class="tl-label above">Decisión 1</span></div>
+                        <div class="tl-node"><span class="tl-act">🎮</span><span class="tl-label below">Decisión 2</span></div>
+                        <div class="tl-node"><span class="tl-act">🏁</span><span class="tl-label above">Decisión Final</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 6</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 12</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 16</span></div>
+                    </div></div>
+                    <div class="features">
+                        <h4>📋 Características</h4>
+                        <ul>
+                            <li>Empiezas a decidir SIN leer el manual (aprendizaje por descubrimiento)</li>
+                            <li>Consultas el manual tras la primera experiencia para entender resultados</li>
+                            <li>Análisis de resultados mediante el Cuadro de Mando</li>
+                            <li>Segunda ronda informada por la teoría</li>
+                            <li>Cierre con aprendizaje consolidado tras reflexión sobre errores</li>
+                        </ul>
+                        <div class="ideal"><strong>✅ Ideal para:</strong> Bootcamps, workshops, aprendizaje experiencial, motivación inicial.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÉTODO MIXTO -->
+            <div class="method m-teal">
+                <div class="method-head">
+                    <h3>🔷 Método Mixto</h3>
+                    <div class="method-quote">"El simulador como evidencia de aprendizaje acumulativo"</div>
+                </div>
+                <div class="method-body">
+                    <div class="tl-title">Línea de Tiempo de Implementación</div>
+                    <div class="tl-sub">Combina lo mejor de ambos mundos. Alterna teoría y práctica intercaladamente.</div>
+                    <div class="tl"><div class="tl-track">
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 0</span></div>
+                        <div class="tl-node"><span class="tl-act">📖</span><span class="tl-label above">Manual</span></div>
+                        <div class="tl-node"><span class="tl-act">📊</span><span class="tl-label above">Cuadro de Mando</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 6</span></div>
+                        <div class="tl-node"><span class="tl-act">🎮</span><span class="tl-label above">Decisión 1</span></div>
+                        <div class="tl-node"><span class="tl-act">🎮</span><span class="tl-label above">Decisión 2</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 12</span></div>
+                        <div class="tl-node"><span class="tl-act">🏁</span><span class="tl-label above">Decisión Final</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 16</span></div>
+                    </div></div>
+                    <div class="features">
+                        <h4>📋 Características</h4>
+                        <ul>
+                            <li>Alternas bloques de teoría con rondas de decisión</li>
+                            <li>Cada concepto se aplica de inmediato en el simulador</li>
+                            <li>Análisis continuo con el Cuadro de Mando entre rondas</li>
+                            <li>Aprendizaje acumulativo: cada periodo construye sobre el anterior</li>
+                            <li>Cierre con evidencia del progreso a lo largo del curso</li>
+                        </ul>
+                        <div class="ideal"><strong>✅ Ideal para:</strong> Asignaturas semestrales y programas con sesiones regulares.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÉTODOS ALTERNOS -->
+            <div class="method m-purple">
+                <div class="method-head">
+                    <h3>🟣 Métodos Alternos</h3>
+                    <div class="method-quote">"Presencial + Autónomo. Flexibilidad máxima"</div>
+                </div>
+                <div class="method-body">
+                    <div class="tl-title">Modalidades Disponibles</div>
+                    <div class="tl-sub">Dos formatos adaptables según necesidades del grupo.</div>
+
+                    <div class="alt-sub">📅 Presencial — Semanal</div>
+                    <div class="tl" style="padding:46px 8px 28px;"><div class="tl-track">
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 0</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 1</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 2</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 3</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Semana 4</span></div>
+                    </div></div>
+                    <div class="tl-auto">
+                        <span class="tl-auto-lbl">Trabajo<br>Autónomo</span>
+                        <div class="tl-auto-pins">
+                            <div class="tl-auto-pin"><span class="pin-lbl">Manual</span><span class="pin-c">📖</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión 1</span><span class="pin-c">🎮</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión 2</span><span class="pin-c">🎮</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión 3</span><span class="pin-c">🎮</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión Final</span><span class="pin-c">🏁</span></div>
+                        </div>
+                    </div>
+
+                    <div class="alt-sub">🔥 Presencial — Intensivo (fin de semana)</div>
+                    <div class="tl" style="padding:46px 8px 28px;"><div class="tl-track">
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Viernes</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Sábado</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Viernes</span></div>
+                        <div class="tl-node"><span class="tl-week"></span><span class="tl-label below wk">Sábado</span></div>
+                    </div></div>
+                    <div class="tl-auto">
+                        <span class="tl-auto-lbl">Trabajo<br>Autónomo</span>
+                        <div class="tl-auto-pins">
+                            <div class="tl-auto-pin"><span class="pin-lbl">Manual</span><span class="pin-c">📖</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión 1</span><span class="pin-c">🎮</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión 2</span><span class="pin-c">🎮</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión 3</span><span class="pin-c">🎮</span></div>
+                            <div class="tl-auto-pin"><span class="pin-lbl">Decisión Final</span><span class="pin-c">🏁</span></div>
+                        </div>
+                    </div>
+                    <div class="features">
+                        <h4>📋 Características</h4>
+                        <ul>
+                            <li>Combina sesiones presenciales con trabajo autónomo del equipo</li>
+                            <li>Disponible en formato semanal o intensivo de fin de semana</li>
+                            <li>Las decisiones se preparan de forma autónoma entre sesiones</li>
+                            <li>Máxima flexibilidad de calendario para el grupo</li>
+                            <li>El facilitador guía solo los puntos de encuentro clave</li>
+                        </ul>
+                        <div class="ideal"><strong>✅ Ideal para:</strong> Programas ejecutivos, educación continua y grupos con poca disponibilidad.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 19: FAQ ===================== -->
+    <div class="slide" id="slide19">
+        <div class="slide-header">
+            <h1>❓ Preguntas Frecuentes</h1>
+            <h2>Las dudas más comunes antes de iniciar la simulación</h2>
+            <div class="slide-number">14</div>
+        </div>
+        <div class="slide-content">
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Cuántos periodos tiene la simulación?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">Depende de la configuración del profesor, pero típicamente entre <strong>3 y 5 periodos</strong>. Cada periodo representa un año de gestión de tu empresa.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Cómo se forman los equipos?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">El profesor asigna equipos de <strong>3 a 5 personas</strong>. Cada equipo gestiona una empresa independiente que compite contra las demás.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Puedo cambiar mis decisiones después de enviarlas?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">La mayoría sí, mientras el periodo esté <strong>abierto</strong>. Pero hay excepciones: la <strong>construcción de nuevas fábricas</strong>, la <strong>entrada a nuevos mercados</strong> y la <strong>compra de informes al Consultor</strong> quedan bloqueadas en cuanto las envías. Analiza bien antes de decidirlas.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Qué pasa si no envío decisiones a tiempo?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">Si no introduces todas las decisiones, se <strong>reducen la competitividad y el Valor de tu compañía</strong>. En precio y unidades a producir se asume el valor del periodo anterior. Recuerda pulsar <strong>Guardar</strong> aunque repitas las mismas decisiones.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Cómo se evalúa mi desempeño?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">La métrica principal es el <strong>Valor de la Compañía</strong>, compuesto por varios factores ponderados (Resultados Económicos 41%, Eficiencia Logística 13%, Innovación de Producto 13%, Valor de Marca 13%, Tecnología Industrial 10% y Endeudamiento y Solvencia 10%).</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Por qué desapareció parte de mi stock?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">Por <strong>obsolescencia</strong>: pasados seis meses el producto deja de ser apto para la venta y va directamente a pérdidas. No acumules demasiado inventario.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Puedo subir más de un nivel de innovación o tecnología por periodo?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">No: solo puedes subir <strong>un nivel por periodo</strong>. El gasto no se pierde del todo y puede ayudarte en el siguiente, y los niveles alcanzados se mantienen aunque dejes de invertir.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Necesito conocimientos previos de finanzas o marketing?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">No es indispensable. El simulador es intuitivo y el manual te guía en cada decisión. Aprenderás estos conceptos durante la simulación — ¡ese es el objetivo!</div></div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">¿Qué es el Crédito Extraordinario?<span class="icon">▼</span></div>
+                    <div class="accordion-body"><div class="accordion-content">Es un préstamo a corto plazo que el sistema activa automáticamente si tu empresa no tiene recursos para cubrir sus obligaciones. Tiene un <strong>tipo de interés mayor</strong> y penaliza más cuanto mayor es su monto; no se puede cancelar con tesorería. ¡Evítalo planificando tu financiación a largo plazo!</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SLIDE 20: CIERRE ===================== -->
+    <div class="slide" id="slide20">
+        <div class="closing">
+            <h1>¡Gracias!</h1>
+            <p class="thanks-sub">Gracias por participar en Business Strategy</p>
+            <div class="contact-box">
+                <div class="contact-line">📧 <a href="mailto:fidelizacion@simuladoresdenegocios.co">fidelizacion@simuladoresdenegocios.co</a></div>
+                <div class="contact-line"><svg class="wa-icon" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> <a href="https://wa.me/573017903086">301 790 3086</a></div>
+            </div>
+            <div class="social-row">
+                <a class="social-icon" href="https://co.linkedin.com/company/simuladores-de-negocios-colombia-sas" target="_blank" rel="noopener" aria-label="LinkedIn">
+                    <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M100.28 448H7.4V148.9h92.88zm-46.44-338.7C24.09 109.3 0 85.18 0 55.7A53.79 53.79 0 0 1 53.79 1.9c29.7 0 53.8 24.09 53.8 53.8 0 29.48-24.1 53.6-53.75 53.6zM447.9 448h-92.68V302.4c0-34.7-.7-79.4-48.4-79.4-48.4 0-55.8 37.8-55.8 76.9V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z"/></svg>
+                </a>
+                <a class="social-icon" href="https://www.youtube.com/@SimuladoresdeNegocios/videos" target="_blank" rel="noopener" aria-label="YouTube">
+                    <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.1 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232 335.1V177l143.7 79.1L232 335.1z"/></svg>
+                </a>
+                <a class="social-icon" href="https://simuladordenegocios.co/" target="_blank" rel="noopener" aria-label="Página web">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </a>
+            </div>
+            <div class="sdn-img-box" id="sdn-box">
+                <img class="sdn-img" src="assets/logo-sdn.png" alt="Simuladores de Negocios Colombia"
+                     onerror="document.getElementById('sdn-box').style.display='none'; document.getElementById('sdn-text-fallback').style.display='flex';">
+            </div>
+            <div class="sdn-logo" id="sdn-text-fallback" style="display:none;">
+                <span class="sdn-mark">↻</span>
+                <span class="sdn-text">
+                    <span class="sdn-main">SIMULADORES</span>
+                    <span class="sdn-sub">de negocios</span>
+                    <span class="sdn-col">Colombia</span>
+                </span>
+            </div>
+            <div class="brand-pill">🛴 Business Strategy</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================== LIGHTBOX ===================== -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- ===================== NAV BAR ===================== -->
+<div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>◀ Anterior</button>
+    <div class="slide-counter" id="slideCounter">1 / 20</div>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente ▶</button>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function startPresentation() {
+        document.getElementById('introOverlay').classList.add('hidden');
+        updateSlide();
+    }
+
+    function changeSlide(direction) {
+        const newSlide = currentSlide + direction;
+        if (newSlide >= 1 && newSlide <= totalSlides) {
+            currentSlide = newSlide;
+            updateSlide();
+        }
+    }
+
+    function updateSlide() {
+        slides.forEach(function(s) { s.classList.remove('active'); });
+        slides[currentSlide - 1].classList.add('active');
+
+        document.getElementById('prevBtn').disabled = currentSlide === 1;
+        document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        document.getElementById('nextBtn').innerHTML = currentSlide === totalSlides ? '✓ Finalizar' : 'Siguiente ▶';
+        document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+
+        const progress = (currentSlide / totalSlides) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleAccordion(header) { header.parentElement.classList.toggle('active'); }
+    function toggleFactor(header) { header.parentElement.classList.toggle('active'); }
+
+    // ===== LIGHTBOX =====
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    function openLightbox(src, caption) {
+        lightboxImg.src = src;
+        lightboxCaption.textContent = caption || '';
+        lightbox.classList.add('active');
+    }
+    function closeLightbox() { lightbox.classList.remove('active'); }
+
+    document.addEventListener('keydown', function(e) {
+        if (lightbox.classList.contains('active')) { if (e.key === 'Escape') closeLightbox(); return; }
+        if (document.getElementById('introOverlay').classList.contains('hidden') === false) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        else if (e.key === 'ArrowLeft') { changeSlide(-1); }
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', function(e) {
+        if (lightbox.classList.contains('active')) return;
+        const diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) { changeSlide(diff > 0 ? 1 : -1); }
+    });
+</script>
+
+</body>
+</html>
