@@ -410,6 +410,7 @@
         /* ===== RECORRIDO POR PASOS (mismo componente que Planificación de Focus) ===== */
         .phase-intro { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:22px; color:#555; line-height:1.6; }
         .phase-intro .badge { margin:0; }
+        * + .phase-intro { margin-top:22px; }
         .plan-steps { position:relative; display:grid; grid-template-columns:repeat(var(--steps,9),1fr); gap:8px; margin-bottom:24px; }
         .plan-steps::before { content:''; position:absolute; top:23px; left:calc(50% / var(--steps,9)); right:calc(50% / var(--steps,9)); height:3px; background:#e2e8ee; z-index:0; }
         .plan-step { position:relative; z-index:1; background:none; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; color:#777; padding:0; }
@@ -1339,7 +1340,7 @@
 
             <div class="plan-panel active" data-step="1">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">1</div><div><h3>🌍&nbsp;1&nbsp;·&nbsp;Estratégicas</h3><p>Decides si <strong>construyes nuevas fábricas</strong> o <strong>entras en nuevos mercados</strong>, y comparas tu gasto en promoción, innovación y tecnología con el presupuesto disponible.</p></div></div>
+                    <div class="dec-head"><div class="dec-num">1</div><div><h3>🌍 Estratégicas</h3><p>Decides si <strong>construyes nuevas fábricas</strong> o <strong>entras en nuevos mercados</strong>, y comparas tu gasto en promoción, innovación y tecnología con el presupuesto disponible.</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Expansión</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Es la <strong>primera pestaña</strong> que debes completar: define tu crecimiento y, una vez enviadas, estas decisiones quedan bloqueadas.</p></div>
                     <div class="dec-shot"><img src="assets/dec-estrategicas.jpg" alt="Decisiones estratégicas" loading="lazy" onclick="openLightbox('assets/dec-estrategicas.jpg','Decisiones estratégicas')"></div>
@@ -1348,7 +1349,7 @@
 
             <div class="plan-panel" data-step="2">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">2</div><div><h3>💲&nbsp;2&nbsp;·&nbsp;Precios</h3><p>Fijas el precio de la bici, el patinete y la scooter en cada mercado, con los precios de referencia como guía.</p></div></div>
+                    <div class="dec-head"><div class="dec-num">2</div><div><h3>💲 Precios</h3><p>Fijas el precio de la bici, el patinete y la scooter en cada mercado, con los precios de referencia como guía.</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Marketing</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Si abres un mercado, pon su precio <strong>ese mismo periodo</strong> o no podrás hacerlo después. Y una vez vendes en un mercado, no puedes retirarte.</p></div>
                     <div class="dec-shot"><img src="assets/dec-precios.jpg" alt="Decisiones de precios" loading="lazy" onclick="openLightbox('assets/dec-precios.jpg','Decisiones de precios')"></div>
@@ -1357,7 +1358,7 @@
 
             <div class="plan-panel" data-step="3">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">3</div><div><h3>🛴&nbsp;3&nbsp;·&nbsp;Producto</h3><p>Eliges el nivel de <strong>packaging</strong> por mercado y producto, y la <strong>gama de producto</strong> de cada línea (niveles 1 a 5).</p></div></div>
+                    <div class="dec-head"><div class="dec-num">3</div><div><h3>🛴 Producto</h3><p>Eliges el nivel de <strong>packaging</strong> por mercado y producto, y la <strong>gama de producto</strong> de cada línea (niveles 1 a 5).</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Producto</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Más nivel hace el producto <strong>más atractivo</strong>, pero también eleva los costes logísticos y de fabricación.</p></div>
                     <div class="dec-shot"><img src="assets/dec-producto.jpg" alt="Decisiones de producto" loading="lazy" onclick="openLightbox('assets/dec-producto.jpg','Decisiones de producto: packaging y gama')"></div>
@@ -1366,7 +1367,7 @@
 
             <div class="plan-panel" data-step="4">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">4</div><div><h3>📣&nbsp;4&nbsp;·&nbsp;Promoción</h3><p>Asignas el presupuesto de promoción por mercado y producto y, desde el periodo 1, puedes instalar una <strong>delegación comercial</strong> (1,5 % de los ingresos del mercado).</p></div></div>
+                    <div class="dec-head"><div class="dec-num">4</div><div><h3>📣 Promoción</h3><p>Asignas el presupuesto de promoción por mercado y producto y, desde el periodo 1, puedes instalar una <strong>delegación comercial</strong> (1,5 % de los ingresos del mercado).</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Marketing</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Construye el <strong>valor de marca</strong>, que pesa un 13 % en el Valor de la Compañía.</p></div>
                     <div class="dec-shot"><img src="assets/dec-promocion.jpg" alt="Decisiones de promoción" loading="lazy" onclick="openLightbox('assets/dec-promocion.jpg','Decisiones de promoción y delegación comercial')"></div>
@@ -1375,7 +1376,7 @@
 
             <div class="plan-panel" data-step="5">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">5</div><div><h3>💡&nbsp;5&nbsp;·&nbsp;Innovación</h3><p>Inviertes en <strong>innovación de producto</strong> (por línea) y en <strong>tecnología industrial</strong> (por tipo de fábrica).</p></div></div>
+                    <div class="dec-head"><div class="dec-num">5</div><div><h3>💡 Innovación</h3><p>Inviertes en <strong>innovación de producto</strong> (por línea) y en <strong>tecnología industrial</strong> (por tipo de fábrica).</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">I+D</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Mejora atractivo, costes, capacidad y fiabilidad. Ambos factores suman un <strong>23 %</strong> del Valor de la Compañía.</p></div>
                     <div class="dec-shot"><img src="assets/dec-innovacion.jpg" alt="Decisiones de innovación y tecnología industrial" loading="lazy" onclick="openLightbox('assets/dec-innovacion.jpg','Decisiones de innovación y tecnología industrial')"></div>
@@ -1384,7 +1385,7 @@
 
             <div class="plan-panel" data-step="6">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">6</div><div><h3>🏭&nbsp;6&nbsp;·&nbsp;Producción</h3><p>Decides cuántas unidades fabricar de cada producto en cada fábrica, o <strong>cesas la producción</strong> de una línea. El simulador te indica la limitación de unidades.</p></div></div>
+                    <div class="dec-head"><div class="dec-num">6</div><div><h3>🏭 Producción</h3><p>Decides cuántas unidades fabricar de cada producto en cada fábrica, o <strong>cesas la producción</strong> de una línea. El simulador te indica la limitación de unidades.</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Operaciones</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Lo que no vendas queda en <strong>inventario</strong> y a los 6 meses se vuelve obsoleto; producir poco te hace perder ventas.</p></div>
                     <div class="dec-shot"><img src="assets/dec-produccion.jpg" alt="Decisiones de producción" loading="lazy" onclick="openLightbox('assets/dec-produccion.jpg','Decisiones de producción')"></div>
@@ -1393,7 +1394,7 @@
 
             <div class="plan-panel" data-step="7">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">7</div><div><h3>🚚&nbsp;7&nbsp;·&nbsp;Logística</h3><p>Eliges hasta <strong>dos opciones</strong> entre almacén de fábrica, centro de servicio al cliente y centros de distribución, y la modalidad de transporte por categoría.</p></div></div>
+                    <div class="dec-head"><div class="dec-num">7</div><div><h3>🚚 Logística</h3><p>Eliges hasta <strong>dos opciones</strong> entre almacén de fábrica, centro de servicio al cliente y centros de distribución, y la modalidad de transporte por categoría.</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Logística</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Mejora tu <strong>eficiencia logística</strong> (13 % del Valor). Ojo: un almacén de distribución no se puede cerrar después.</p></div>
                     <div class="dec-shot"><img src="assets/dec-logistica.jpg" alt="Decisiones de logística" loading="lazy" onclick="openLightbox('assets/dec-logistica.jpg','Decisiones de logística')"></div>
@@ -1402,7 +1403,7 @@
 
             <div class="plan-panel" data-step="8">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">8</div><div><h3>🗺️&nbsp;8&nbsp;·&nbsp;Priorización Ventas</h3><p>Indicas qué prioridad tiene cada relación <strong>país de fabricación → mercado</strong> (1 = máxima prioridad).</p></div></div>
+                    <div class="dec-head"><div class="dec-num">8</div><div><h3>🗺️ Priorización Ventas</h3><p>Indicas qué prioridad tiene cada relación <strong>país de fabricación → mercado</strong> (1 = máxima prioridad).</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Logística</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Dar máxima prioridad a relaciones de <strong>categoría 5 o superior</strong> dispara los costes de transporte.</p></div>
                     <div class="dec-shot"><img src="assets/dec-priorizacion.jpg" alt="Priorización de ventas país-mercado" loading="lazy" onclick="openLightbox('assets/dec-priorizacion.jpg','Priorización de ventas país-mercado')"></div>
@@ -1411,7 +1412,7 @@
 
             <div class="plan-panel" data-step="9">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">9</div><div><h3>🎓&nbsp;9&nbsp;·&nbsp;Capacitación</h3><p>Defines el presupuesto de desarrollo de capacidades y repartes hasta <strong>21 puntos</strong> de prioridad (1 a 5) entre siete áreas de la organización.</p></div></div>
+                    <div class="dec-head"><div class="dec-num">9</div><div><h3>🎓 Capacitación</h3><p>Defines el presupuesto de desarrollo de capacidades y repartes hasta <strong>21 puntos</strong> de prioridad (1 a 5) entre siete áreas de la organización.</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Talento</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">A mayor nivel de capacidades, <strong>mayor rendimiento</strong> obtienes de cada peso invertido en innovación y tecnología.</p></div>
                     <div class="dec-shot"><img src="assets/dec-capacitacion.jpg" alt="Decisiones de capacitación" loading="lazy" onclick="openLightbox('assets/dec-capacitacion.jpg','Decisiones de capacitación')"></div>
@@ -1420,7 +1421,7 @@
 
             <div class="plan-panel" data-step="10">
                 <div class="dec-block">
-                    <div class="dec-head"><div class="dec-num">10</div><div><h3>🏦&nbsp;10&nbsp;·&nbsp;Financiación</h3><p>Solicitas préstamos a largo o corto plazo, con tu balance de situación como referencia.</p></div></div>
+                    <div class="dec-head"><div class="dec-num">10</div><div><h3>🏦 Financiación</h3><p>Solicitas préstamos a largo o corto plazo, con tu balance de situación como referencia.</p></div></div>
                     <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Finanzas</span></div>
                     <div class="plan-why"><span class="cm-why-label">💡 Por qué importa</span><p class="cm-why-text">Son más baratos que el crédito extraordinario, pero el banco los limita. Con <strong>Recursos Propios negativos</strong> no tendrás préstamos a largo plazo.</p></div>
                     <div class="dec-shot"><img src="assets/dec-financiacion.jpg" alt="Decisiones de financiación" loading="lazy" onclick="openLightbox('assets/dec-financiacion.jpg','Decisiones de financiación')"></div>
